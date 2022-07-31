@@ -108,7 +108,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("/nickName")
+    @PostMapping("/nicknames")
     @ApiOperation(value = "닉네임 사용 가능 검사")
     public BaseResponse<String> checkNickName(@RequestBody NickName nickName) {
         if(nickName.getNickName() == null) {
@@ -134,6 +134,27 @@ public class UserController {
 
     }
 
+    @ResponseBody
+    @PatchMapping("{userId}/profiles")
+    @ApiOperation(value = "프로필 수정")
+    public BaseResponse<String> modifyUserProfile(@PathVariable("userId") long userId, @RequestBody PatchUserReq patchUserReq) {
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.modifyUserProfile(userId, patchUserReq);
+
+            String result = "프로필 수정 성공!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
 
 
 //    @ResponseBody

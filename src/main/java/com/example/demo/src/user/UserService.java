@@ -54,15 +54,18 @@ public class UserService {
 
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
 
+        try {
+            //휴대폰 번호 중복 체크
+            if (userDao.checkPhoneNumber(postUserReq.getPhoneNumber()) == 1) {
+                throw new BaseException(POST_USERS_EXISTS_PHONENUMBER);
+            }
 
-        //휴대폰 번호 중복 체크
-        if (userDao.checkPhoneNumber(postUserReq.getPhoneNumber()) == 1) {
-            throw new BaseException(POST_USERS_EXISTS_PHONENUMBER);
-        }
-
-        //사용자 닉네임 중복 체크
-        if (userDao.checkNickName(postUserReq.getNickName()) == 1) {
-            throw new BaseException(POST_USERS_EXISTS_USERNAME);
+            //사용자 닉네임 중복 체크
+            if (userDao.checkNickName(postUserReq.getNickName()) == 1) {
+                throw new BaseException(POST_USERS_EXISTS_USERNAME);
+            }
+        } catch (Exception exception) {
+            throw exception;
         }
 
         //비밀 번호 암호화
@@ -85,9 +88,21 @@ public class UserService {
     }
 
     public void checkNickName(String nickName) throws BaseException {
-        //사용자 닉네임 중복 체크
-        if (userDao.checkNickName(nickName) == 1) {
-            throw new BaseException(POST_USERS_EXISTS_USERNAME);
+        try {
+            //사용자 닉네임 중복 체크
+            if (userDao.checkNickName(nickName) == 1) {
+                throw new BaseException(POST_USERS_EXISTS_USERNAME);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+    }
+
+    public void modifyUserProfile(long userId, PatchUserReq patchUserReq) throws BaseException {
+        try {
+            userDao.modifyUserProfile(userId, patchUserReq);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 //

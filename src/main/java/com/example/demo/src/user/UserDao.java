@@ -41,6 +41,14 @@ public class UserDao {
         String checkParam = nickName;
         return this.jdbcTemplate.queryForObject(checkPhoneNumberQuery, int.class, checkParam);
     }
+
+    public void modifyUserProfile(long userId, PatchUserReq patchUserReq) {
+        String updateQuery = "update User set profileImg = ?, webSite = ?, userIntro = ? where userId = ?";
+        Object[] updateParams = new Object[] {patchUserReq.getProfileImg(), patchUserReq.getWebSite(),
+                patchUserReq.getUserIntro(), userId};
+
+        this.jdbcTemplate.update(updateQuery, updateParams);
+    }
 //
 //    public User getPwd(PostLoginReq postLoginReq) {
 //        String getPwdQuery = "select userId, password from User where emailAddr = ?";
