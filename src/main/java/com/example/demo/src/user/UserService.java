@@ -83,6 +83,13 @@ public class UserService {
         }
 
     }
+
+    public void checkNickName(String nickName) throws BaseException {
+        //사용자 닉네임 중복 체크
+        if (userDao.checkNickName(nickName) == 1) {
+            throw new BaseException(POST_USERS_EXISTS_USERNAME);
+        }
+    }
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크

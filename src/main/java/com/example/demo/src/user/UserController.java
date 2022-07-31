@@ -85,11 +85,11 @@ public class UserController {
             return new BaseResponse<>(POST_USERS_INVALID_PRIVACY);
         }
 
-        if(postUserReq.getUserName() == null) {
+        if(postUserReq.getNickName() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
         }
 
-        if(postUserReq.getUserName().length() >= 20) {
+        if(postUserReq.getNickName().length() >= 20) {
             return new BaseResponse<>(POST_USERS_OVER_LENGTH_NICKNAME);
         }
 
@@ -101,6 +101,33 @@ public class UserController {
         try{
             PostUserRes postUserRes = userService.createUser(postUserReq);
             return new BaseResponse<>(postUserRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
+
+    @ResponseBody
+    @PostMapping("/nickName")
+    @ApiOperation(value = "닉네임 사용 가능 검사")
+    public BaseResponse<String> checkNickName(@RequestBody NickName nickName) {
+        if(nickName.getNickName() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+        }
+
+        if(nickName.getNickName().length() >= 20) {
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_NICKNAME);
+        }
+
+        String nickNamePattern = "^[a-z0-9._]{1,20}$";
+        if(!Pattern.matches(nickNamePattern, nickName.getNickName())) {
+            return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+        }
+
+        try{
+            userService.checkNickName(nickName.getNickName());
+            String result = "닉네임 검사 완료! 해당 아이디 사용가능";
+            return new BaseResponse<>(result);
         } catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }

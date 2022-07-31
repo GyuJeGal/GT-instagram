@@ -58,5 +58,7 @@ com/example/demo/src/user/model/PostUserReq.java
  com.example.demo.src.user.model.PostUserReq
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/src/user/model/NickName.java
+ com.example.demo.src.user.model.NickName
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
