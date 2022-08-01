@@ -54,6 +54,10 @@ public enum BaseResponseStatus {
     PATCH_USERS_EMPTY_USERNAME(false,2100,"이름을 입력해주세요."),
     PATCH_USERS_OVERFLOW_USERNAME(false,2101,"이름은 최대 20자까지 입력해주세요."),
 
+    // [PATCH] /users/{userId}/nicknames
+    PATCH_USERS_EMPTY_NICKNAME(false,2110,"사용자 이름을 입력해주세요."),
+    PATCH_USERS_OVERFLOW_NICKNAME(false,2111,"사용자 이름은 최대 20자까지 입력해주세요."),
+
 
     /**
      * 3000 : Response 오류
@@ -67,7 +71,7 @@ public enum BaseResponseStatus {
 
     POST_USERS_EXISTS_PHONENUMBER(false,3020,"중복된 휴대폰 번호입니다."),
 
-    POST_USERS_EXISTS_USERNAME(false,3030,"중복된 사용자 이름입니다."),
+    DUPLICATED_NICKNAME(false,3030,"중복된 사용자 이름입니다."),
 
 
     FAILED_TO_MODIFY_USERNAME(false,3040,"14일 이내에 이름 변경은 최대 2번입니다."),

@@ -195,7 +195,7 @@ public class UserController {
 
             userService.modifyUserName(userId, userName.getUserName());
 
-            String result = "사용자 이름 수정 완료!";
+            String result = "이름 수정 완료!";
             return new BaseResponse<>(result);
 
         } catch (BaseException exception) {
@@ -203,6 +203,39 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("{userId}/nicknames")
+    @ApiOperation(value = "프로필 수정(사용자 이름)")
+    public BaseResponse<String> modifyNickName(@PathVariable("userId") long userId, @RequestBody NickName nickName) {
+        if(nickName.getNickName() == null) {
+            return new BaseResponse<>(PATCH_USERS_EMPTY_NICKNAME);
+        }
+
+        if(nickName.getNickName().length() >= 20) {
+            return new BaseResponse<>(PATCH_USERS_OVERFLOW_NICKNAME);
+        }
+
+        String nickNamePattern = "^[a-z0-9._]{1,20}$";
+        if(!Pattern.matches(nickNamePattern, nickName.getNickName())) {
+            return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+        }
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.modifyNickName(userId, nickName.getNickName());
+
+            String result = "사용자 이름 수정 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
 
 //    @ResponseBody
 //    @PostMapping("")

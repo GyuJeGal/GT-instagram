@@ -83,6 +83,31 @@ public class UserDao {
         String getUserNameQuery = "select userName from User where userId = ?";
         return this.jdbcTemplate.queryForObject(getUserNameQuery, String.class, userId);
     }
+
+    public int countModifyNickName(long userId) {
+        String countModifyUserNameQuery = "select count(updateNickNameId)\n" +
+                "from UpdateNickName\n" +
+                "where userId = ? and TIMESTAMPDIFF(DAY, createAt, NOW()) < 14";
+
+        return this.jdbcTemplate.queryForObject(countModifyUserNameQuery, int.class, userId);
+    }
+
+    public void modifyNickName(long userId, String nickName) {
+        String updateQuery = "update User set nickName = ? where userId = ?";
+        Object[] updateParams = new Object[] {nickName, userId};
+        this.jdbcTemplate.update(updateQuery, updateParams);
+
+        String insertQuery = "insert into UpdateUserName (contents, userId) VALUES (?,?)";
+        this.jdbcTemplate.update(insertQuery, updateParams);
+
+    }
+
+    public String getNickName(long userId) {
+        String getNickNameQuery = "select nickName from User where userId = ?";
+        return this.jdbcTemplate.queryForObject(getNickNameQuery, String.class, userId);
+    }
+
+
 //
 //    public User getPwd(PostLoginReq postLoginReq) {
 //        String getPwdQuery = "select userId, password from User where emailAddr = ?";

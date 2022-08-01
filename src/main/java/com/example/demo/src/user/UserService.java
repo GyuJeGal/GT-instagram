@@ -62,7 +62,7 @@ public class UserService {
 
             //사용자 닉네임 중복 체크
             if (userDao.checkNickName(postUserReq.getNickName()) == 1) {
-                throw new BaseException(POST_USERS_EXISTS_USERNAME);
+                throw new BaseException(DUPLICATED_NICKNAME);
             }
         } catch (Exception exception) {
             throw exception;
@@ -91,7 +91,7 @@ public class UserService {
         try {
             //사용자 닉네임 중복 체크
             if (userDao.checkNickName(nickName) == 1) {
-                throw new BaseException(POST_USERS_EXISTS_USERNAME);
+                throw new BaseException(DUPLICATED_NICKNAME);
             }
         } catch (Exception exception) {
             throw exception;
@@ -126,6 +126,30 @@ public class UserService {
                 }
                 else {
                     userDao.modifyUserName(userId, userName);
+                }
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+    }
+
+    public void modifyNickName(long userId, String nickName) throws BaseException {
+        try {
+            // 같은 사용자 이름으로 변경한 경우(아래의 로직 건너뛰기, 변경 카운트 증가X)
+            if(!nickName.equals(userDao.getNickName(userId))) {
+                // 14일 이내에 사용자 이름을 2번 변경한 경우
+                if(userDao.countModifyNickName(userId) >= 2) {
+                    throw new BaseException(FAILED_TO_MODIFY_NICKNAME);
+                }
+                else {
+                    // 사용자 이름이 중복되는 경우
+                    if(userDao.checkNickName(nickName) == 1) {
+                        throw new BaseException(DUPLICATED_NICKNAME);
+                    }
+                    else {
+                        userDao.modifyNickName(userId, nickName);
+                    }
                 }
             }
 
