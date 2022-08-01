@@ -89,7 +89,7 @@ public class UserController {
             return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
         }
 
-        if(postUserReq.getNickName().length() >= 20) {
+        if(postUserReq.getNickName().length() > 20) {
             return new BaseResponse<>(POST_USERS_OVER_LENGTH_NICKNAME);
         }
 
@@ -155,7 +155,7 @@ public class UserController {
 
     @ResponseBody
     @PatchMapping("{userId}/profiles")
-    @ApiOperation(value = "프로필 수정")
+    @ApiOperation(value = "프로필 수정(프로필 사진, 웹사이트, 소개)")
     public BaseResponse<String> modifyUserProfile(@PathVariable("userId") long userId, @RequestBody PatchUserReq patchUserReq) {
 
         try {
@@ -173,6 +173,34 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
 
+    }
+
+    @ResponseBody
+    @PatchMapping("{userId}/usernames")
+    @ApiOperation(value = "프로필 수정(이름)")
+    public BaseResponse<String> modifyUserName(@PathVariable("userId") long userId, @RequestBody UserName userName) {
+        if(userName.getUserName() == null) {
+            return new BaseResponse<>(PATCH_USERS_EMPTY_USERNAME);
+        }
+
+        if(userName.getUserName().length() > 20) {
+            return new BaseResponse<>(PATCH_USERS_OVERFLOW_USERNAME);
+        }
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.modifyUserName(userId, userName.getUserName());
+
+            String result = "사용자 이름 수정 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 
 

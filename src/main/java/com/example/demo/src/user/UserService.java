@@ -115,6 +115,24 @@ public class UserService {
         }
 
     }
+
+    public void modifyUserName(long userId, String userName) throws BaseException {
+        try {
+            // 같은 이름으로 변경한 경우(아래의 로직 건너뛰기, 변경 카운트 증가X)
+            if(!userName.equals(userDao.getUserName(userId))) {
+                // 14일 이내에 이름을 2번 변경한 경우
+                if(userDao.countModifyUserName(userId) >= 2) {
+                    throw new BaseException(FAILED_TO_MODIFY_USERNAME);
+                }
+                else {
+                    userDao.modifyUserName(userId, userName);
+                }
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+    }
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크

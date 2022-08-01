@@ -25,7 +25,7 @@ public enum BaseResponseStatus {
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
-    // [POST] /users, /users/login
+    // [POST] /users
     POST_USERS_EMPTY_EMAIL(false, 2020, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2021, "이메일 형식을 확인해주세요."),
     POST_USERS_OVER_LENGTH_EMAIL(false, 2022, "이메일 길이를 확인해주세요."),
@@ -35,30 +35,24 @@ public enum BaseResponseStatus {
     POST_USERS_INVALID_PHONENUMBER(false,2031,"잘못된 휴대폰 번호입니다."),
 
     POST_USERS_EMPTY_NAME(false,2040,"이름을 입력해주세요."),
-    POST_USERS_OVER_LENGTH_NAME(false,2041,"이름은 최대 19자까지 입력해주세요."),
+    POST_USERS_OVER_LENGTH_NAME(false,2041,"이름은 최대 20자까지 입력해주세요."),
 
     POST_USERS_EMPTY_PASSWORD(false,2050,"비밀 번호를 입력해주세요."),
     POST_USERS_INVALID_PASSWORD(false,2051,"비밀 번호는 특수문자 포함 6자 이상입니다."),
 
-    POST_USERS_EMPTY_BIRTHDAY(false,2070,"생일을 입력해주세요."),
-    POST_USERS_INVALID_BIRTHDAY(false,2071,"잘못된 생일 형식입니다."),
+    POST_USERS_EMPTY_BIRTHDAY(false,2060,"생일을 입력해주세요."),
+    POST_USERS_INVALID_BIRTHDAY(false,2061,"잘못된 생일 형식입니다."),
 
-    POST_USERS_EMPTY_PRIVACY(false,2080,"개인정보 약관 동의가 필요합니다."),
-    POST_USERS_INVALID_PRIVACY(false,2081,"잘못된 개인정보 약관 동의입니다."),
+    POST_USERS_EMPTY_PRIVACY(false,2070,"개인정보 약관 동의가 필요합니다."),
+    POST_USERS_INVALID_PRIVACY(false,2071,"잘못된 개인정보 약관 동의입니다."),
 
-    POST_USERS_EMPTY_NICKNAME(false,2090,"사용자 이름을 입력해주세요."),
-    POST_USERS_OVER_LENGTH_NICKNAME(false,2091,"사용자 이름은 최대 20자까지 입력해주세요."),
-    POST_USERS_INVALID_NICKNAME(false,2092,"아이디는 영어, 숫자, '_', '.'만 사용 가능합니다."),
+    POST_USERS_EMPTY_NICKNAME(false,2080,"사용자 이름을 입력해주세요."),
+    POST_USERS_OVER_LENGTH_NICKNAME(false,2081,"사용자 이름은 최대 20자까지 입력해주세요."),
+    POST_USERS_INVALID_NICKNAME(false,2082,"아이디는 영어, 숫자, '_', '.'만 사용 가능합니다."),
 
-
-
-    PATCH_USERS_OVERFLOW_URL(false,2060,"URL 최대길이를 넘어섰습니다."),
-
-    POST_ADD_EMPTY_ORDER_PRODUCT(false,2100,"장바구니에 넣을 작품이 없습니다."),
-    POST_ADD_EMPTY_ORDER_AMOUNT(false,2110,"수량을 입력해주세요."),
-    POST_ADD_EMPTY_ORDER_PRODUCT_OPTION(false,2120,"작품의 추가 옵션 id를 입력해주세요."),
-    
-
+    // [PATCH] /users/{userId}/usernames
+    PATCH_USERS_EMPTY_USERNAME(false,2100,"이름을 입력해주세요."),
+    PATCH_USERS_OVERFLOW_USERNAME(false,2101,"이름은 최대 20자까지 입력해주세요."),
 
 
     /**
@@ -75,30 +69,10 @@ public enum BaseResponseStatus {
 
     POST_USERS_EXISTS_USERNAME(false,3030,"중복된 사용자 이름입니다."),
 
-    FAILED_TO_SEARCH_ONLINE_CLASS(false,3040,"존재하지 않는 온라인 클래스입니다."),
 
-    FAILED_TO_SEARCH_OFFLINE_CLASS(false,3050,"존재하지 않는 오프라인 클래스입니다."),
-    
-    FAILED_TO_SEARCH_ONLINE_CLASS_REVIEW(false,3060,"존재하지 않는 온라인 클래스 수강후기입니다."),
-    
-    FAILED_TO_SEARCH_OFFLINE_CLASS_REVIEW(false,3070,"존재하지 않는 오프라인 클래스 참여후기입니다."),
+    FAILED_TO_MODIFY_USERNAME(false,3040,"14일 이내에 이름 변경은 최대 2번입니다."),
+    FAILED_TO_MODIFY_NICKNAME(false,3050,"14일 이내에 사용자 이름 변경은 최대 2번입니다."),
 
-    FAILED_TO_SEARCH_PRODUCT_CATEGORY(false,3100,"존재하지 않는 작품 카테고리입니다."),
-    FAILED_TO_SEARCH_OFFLINE_CATEGORY(false,3200,"존재하지 않는 오프라인 클래스 카테고리입니다."),
-    FAILED_TO_SEARCH_OFFLINE_ADDRESS(false,3300,"존재하지 않는 오프라인 클래스 주소입니다."),
-    
-    
-    DUPLICATED_PRODUCT_LIKE(false,3310,"중복되는 작품 찜입니다."),
-    EMPTY_PRODUCT_LIKE(false,3311,"작품 찜 상태가 아닙니다."),
-    DUPLICATED_ONLINE_LIKE(false,3320,"중복되는 온라인 클래스 찜입니다."),
-    EMPTY_ONLINE_LIKE(false,3321,"온라인 클래스 찜 상태가 아닙니다."),
-    DUPLICATED_OFFLINE_LIKE(false,3330,"중복되는 오프라인 클래스 찜입니다."),
-    EMPTY_OFFLINE_LIKE(false,3331,"오프라인 클래스 찜 상태가 아닙니다."),
-
-
-    INVALID_PRODUCT_OPTION_COUNT(false,3350,"작품의 추가옵션을 모두 선택해야합니다."),
-    INVALID_PRODUCT_OPTION(false,3400,"잘못된 작품 추가옵션입니다."),
-    INVALID_PRODUCT_OPTION_DETAIL(false,3410,"잘못된 작품 추가옵션 상세입니다."),
 
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),

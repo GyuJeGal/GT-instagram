@@ -61,6 +61,28 @@ public class UserDao {
                 rs.getString("webSite"),
                 rs.getString("userIntro")), userId);
     }
+
+    public int countModifyUserName(long userId) {
+        String countModifyUserNameQuery = "select count(updateUserNameId)\n" +
+                "from UpdateUserName\n" +
+                "where userId = ? and TIMESTAMPDIFF(DAY, createAt, NOW()) < 14";
+
+        return this.jdbcTemplate.queryForObject(countModifyUserNameQuery, int.class, userId);
+    }
+
+    public void modifyUserName(long userId, String userName) {
+        String updateQuery = "update User set userName = ? where userId = ?";
+        Object[] updateParams = new Object[] {userName, userId};
+        this.jdbcTemplate.update(updateQuery, updateParams);
+
+        String insertQuery = "insert into UpdateUserName (contents, userId) VALUES (?,?)";
+        this.jdbcTemplate.update(insertQuery, updateParams);
+    }
+
+    public String getUserName(long userId) {
+        String getUserNameQuery = "select userName from User where userId = ?";
+        return this.jdbcTemplate.queryForObject(getUserNameQuery, String.class, userId);
+    }
 //
 //    public User getPwd(PostLoginReq postLoginReq) {
 //        String getPwdQuery = "select userId, password from User where emailAddr = ?";
