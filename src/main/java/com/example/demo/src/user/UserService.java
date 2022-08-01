@@ -105,6 +105,16 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public GetUserInfo getUserInfo(long userId) throws BaseException {
+        try {
+            GetUserInfo getUserInfo = userDao.getUserInfo(userId);
+            return getUserInfo;
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크

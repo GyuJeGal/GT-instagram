@@ -135,6 +135,25 @@ public class UserController {
     }
 
     @ResponseBody
+    @GetMapping("{userId}/profiles")
+    @ApiOperation(value = "프로필 정보 조회")
+    public BaseResponse<GetUserInfo> getUserInfo(@PathVariable("userId") long userId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            GetUserInfo getUserInfo = userService.getUserInfo(userId);
+            return new BaseResponse<>(getUserInfo);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+    @ResponseBody
     @PatchMapping("{userId}/profiles")
     @ApiOperation(value = "프로필 수정")
     public BaseResponse<String> modifyUserProfile(@PathVariable("userId") long userId, @RequestBody PatchUserReq patchUserReq) {

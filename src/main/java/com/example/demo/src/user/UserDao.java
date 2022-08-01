@@ -49,6 +49,18 @@ public class UserDao {
 
         this.jdbcTemplate.update(updateQuery, updateParams);
     }
+
+    public GetUserInfo getUserInfo(long userId) {
+        String getUserInfoQuery = "select profileImg, userName, nickName, webSite, userIntro\n" +
+                "from User\n" +
+                "where userId = ?";
+        return this.jdbcTemplate.queryForObject(getUserInfoQuery, (rs, rowNum) -> new GetUserInfo(
+                rs.getString("profileImg"),
+                rs.getString("userName"),
+                rs.getString("nickName"),
+                rs.getString("webSite"),
+                rs.getString("userIntro")), userId);
+    }
 //
 //    public User getPwd(PostLoginReq postLoginReq) {
 //        String getPwdQuery = "select userId, password from User where emailAddr = ?";
