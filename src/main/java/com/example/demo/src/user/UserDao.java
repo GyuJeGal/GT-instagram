@@ -125,15 +125,20 @@ public class UserDao {
     }
 
     public int checkFollow(long userId, long followUserId) {
-        String checkFollowQuery = "select exists (select followId from Follow where followingUserId = ? and followedUserId = ?)";
+        String checkFollowQuery = "select exists (select followId from Follow where followingUserId = ? and followedUserId = ? and status >= 0)";
         Object[] params = new Object[] {userId, followUserId};
         return this.jdbcTemplate.queryForObject(checkFollowQuery, int.class, params);
     }
 
-    public int getFollowStatus(long userId, long followUserId) {
-        String getFollowStatusQuery = "select exists (select status from Follow where followingUserId = ? and followedUserId = ?)";
+    public long getFollowId(long userId, long followUserId) {
+        String getFollowIdQuery = "select followId from Follow where followingUserId = ? and followedUserId = ? and status >= 0";
         Object[] params = new Object[] {userId, followUserId};
-        return this.jdbcTemplate.queryForObject(getFollowStatusQuery, int.class, params);
+        return this.jdbcTemplate.queryForObject(getFollowIdQuery, long.class, params);
+    }
+
+    public int getFollowStatus(long followId) {
+        String getFollowStatusQuery = "select status from Follow where followId = ?";
+        return this.jdbcTemplate.queryForObject(getFollowStatusQuery, int.class, followId);
     }
 
     public void followUser(long userId, long followUserId) {
@@ -149,6 +154,12 @@ public class UserDao {
             Object[] params = new Object[] {userId, followUserId, 0};
             this.jdbcTemplate.update(insertQuery, params);
         }
+    }
+
+    public void unfollowUser(long followId) {
+        // 팔로우 취소: -1, 팔로우 승인 대기 중: 0, 팔로우 중: 1
+        String updateQuery = "update Follow set status = -1 where followId = ?";
+        this.jdbcTemplate.update(updateQuery, followId);
     }
 
 

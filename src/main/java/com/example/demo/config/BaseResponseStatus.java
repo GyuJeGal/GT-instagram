@@ -60,7 +60,13 @@ public enum BaseResponseStatus {
 
     // [PATCH] /users/{userId}/open-status
     PATCH_USERS_EMPTY_STATUS(false,2120,"공개/비공개 여부를 입력해주세요."),
+
+    // [POST] /users/{userId}/{followUserId}/follows
+    POST_USERS_INVALID_FOLLOW(false,2130,"본인에게는 팔로우 신청이 불가합니다."),
     
+    // [PATCH] /users/{userId}/{unfollowUserId}/follows
+    PATCH_USERS_INVALID_UNFOLLOW(false,2140,"본인에게는 팔로우 취소가 불가합니다."),
+
 
     /**
      * 3000 : Response 오류
@@ -86,6 +92,7 @@ public enum BaseResponseStatus {
     
     ALREADY_FOLLOW(false,3080,"이미 팔로우 상태입니다."),
     ALREADY_FOLLOW_REQUEST(false,3081,"이미 팔로우 요청 상태입니다."),
+
     ALREADY_UNFOLLOW(false,3090,"이미 언팔로우 상태입니다."),
 
 

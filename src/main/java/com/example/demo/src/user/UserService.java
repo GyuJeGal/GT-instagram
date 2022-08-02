@@ -197,10 +197,13 @@ public class UserService {
 
     public void followUser(long userId, long followUserId) throws BaseException {
         try {
-            // 팔로우가 이미 되어있는 경우
+            // 팔로우 요청이 있는 경우
             if (userDao.checkFollow(userId, followUserId) == 1) {
+
+                long followId = userDao.getFollowId(userId, followUserId);
+
                 // 팔로우가 된 상태인 경우
-                if(userDao.getFollowStatus(userId, followUserId) == 1) {
+                if(userDao.getFollowStatus(followId) == 1) {
                     throw new BaseException(ALREADY_FOLLOW);
                 }
                 // 상대방이 비공개 계정으로서 팔로우 요청 상태인 경우
@@ -215,6 +218,25 @@ public class UserService {
 
         try {
             userDao.followUser(userId, followUserId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void unfollowUser(long userId, long unfollowUserId) throws BaseException {
+        try {
+            // 팔로우가 이미 취소 되어있는 경우
+            if (userDao.checkFollow(userId, unfollowUserId) == 0) {
+                throw new BaseException(ALREADY_UNFOLLOW);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            long followId = userDao.getFollowId(userId, unfollowUserId);
+
+            userDao.unfollowUser(followId);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

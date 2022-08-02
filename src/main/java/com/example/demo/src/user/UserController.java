@@ -290,7 +290,13 @@ public class UserController {
     @ResponseBody
     @PostMapping("{userId}/{followUserId}/follows")
     @ApiOperation(value = "팔로우 신청")
-    public BaseResponse<String> followUser(@PathVariable("userId") long userId, @PathVariable("followUserId") long followUserId) {
+    public BaseResponse<String> followUser(@PathVariable("userId") long userId,
+                                           @PathVariable("followUserId") long followUserId) {
+        // 본인에게 팔로우 신청을 하는 경우
+        if(followUserId == userId) {
+            return new BaseResponse<>(POST_USERS_INVALID_FOLLOW);
+        }
+
         try {
             long userIdByJwt = jwtService.getUserIdx();
             if (userIdByJwt != userId) {
@@ -300,6 +306,32 @@ public class UserController {
             userService.followUser(userId, followUserId);
 
             String result = "팔로우 신청 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("{userId}/{unfollowUserId}/follows")
+    @ApiOperation(value = "팔로우 취소")
+    public BaseResponse<String> unfollowUser(@PathVariable("userId") long userId,
+                                             @PathVariable("unfollowUserId") long unfollowUserId) {
+        // 본인에게 팔로우 신청을 하는 경우
+        if(unfollowUserId == userId) {
+            return new BaseResponse<>(PATCH_USERS_INVALID_UNFOLLOW);
+        }
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.unfollowUser(userId, unfollowUserId);
+
+            String result = "팔로우 취소 완료!";
             return new BaseResponse<>(result);
 
         } catch (BaseException exception) {
