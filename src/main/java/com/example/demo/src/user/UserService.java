@@ -242,6 +242,15 @@ public class UserService {
         }
     }
 
+    public List<GetFollow> getFollows(long userId) throws BaseException {
+        try {
+            return userDao.getFollows(userId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
+
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크

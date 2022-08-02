@@ -162,6 +162,22 @@ public class UserDao {
         this.jdbcTemplate.update(updateQuery, followId);
     }
 
+    public List<GetFollow> getFollows(long userId) {
+        String getFollowsQuery = "select F.followingUserId, F.followId, U.profileImg, U.userName, U.nickName\n" +
+                "from Follow F\n" +
+                "inner join User U on F.followingUserId = U.userId\n" +
+                "where followedUserId = ? and F.status = 0 order by (F.followId) desc";
+
+        List<GetFollow> getFollowList = this.jdbcTemplate.query(getFollowsQuery, (rs, rowNum) -> new GetFollow(
+                rs.getLong("followingUserId"),
+                rs.getLong("followId"),
+                rs.getString("profileImg"),
+                rs.getString("userName"),
+                rs.getString("nickName")), userId);
+
+        return getFollowList;
+    }
+
 
 //
 //    public User getPwd(PostLoginReq postLoginReq) {
