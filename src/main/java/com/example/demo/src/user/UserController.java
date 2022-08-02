@@ -237,6 +237,36 @@ public class UserController {
 
     }
 
+    @ResponseBody
+    @PatchMapping("{userId}/open-status")
+    @ApiOperation(value = "프로필 수정(공개/비공개 설정)")
+    public BaseResponse<String> modifyUserStatus(@PathVariable("userId") long userId, @RequestParam("status") Integer status) {
+        if(status == null) {
+            return new BaseResponse<>(PATCH_USERS_EMPTY_STATUS);
+        }
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.modifyUserStatus(userId, status);
+
+            String result;
+            if(status == 0) {
+                result = "비공개 계정 전환 완료!";
+            }
+            else {
+                result = "공개 계정 전환 완료!";
+            }
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 //    @ResponseBody
 //    @PostMapping("")
 //    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {

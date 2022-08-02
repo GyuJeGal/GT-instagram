@@ -107,6 +107,17 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(getNickNameQuery, String.class, userId);
     }
 
+    public Integer getUserOpenStatus(long userId) {
+        String getNickNameQuery = "select openStatus from User where userId = ?";
+        return this.jdbcTemplate.queryForObject(getNickNameQuery, Integer.class, userId);
+    }
+
+    public void modifyUserStatus(long userId, Integer status) {
+        String updateQuery = "update User set openStatus = ? where userId = ?";
+        Object[] updateParams = new Object[] {status, userId};
+        this.jdbcTemplate.update(updateQuery, updateParams);
+    }
+
 
 //
 //    public User getPwd(PostLoginReq postLoginReq) {

@@ -157,6 +157,36 @@ public class UserService {
             throw exception;
         }
     }
+
+    public void modifyUserStatus(long userId, Integer status) throws BaseException {
+        try {
+            Integer userOpenStatus = userDao.getUserOpenStatus(userId);
+            // 사용자 계정이 공개 계정일 때
+            if(userOpenStatus == 1) {
+                // 공개 계정이지만 공개 계정으로의 요청이 들어오는 잘못된 경우
+                if(userOpenStatus.equals(status)) {
+                    throw new BaseException(ALREADY_PUBLIC_ACCOUNT);
+                }
+            }
+            // 사용자 계정이 비공개 계정일 때
+            else {
+                // 비공개 계정이지만 비공개 계정으로의 요청이 들어오는 잘못된 경우
+                if(userOpenStatus.equals(status)) {
+                    throw new BaseException(ALREADY_PRIVATE_ACCOUNT);
+                }
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            userDao.modifyUserStatus(userId, status);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크

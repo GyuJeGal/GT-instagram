@@ -58,6 +58,9 @@ public enum BaseResponseStatus {
     PATCH_USERS_EMPTY_NICKNAME(false,2110,"사용자 이름을 입력해주세요."),
     PATCH_USERS_OVERFLOW_NICKNAME(false,2111,"사용자 이름은 최대 20자까지 입력해주세요."),
 
+    // [PATCH] /users/{userId}/open-status
+    PATCH_USERS_EMPTY_STATUS(false,2120,"공개/비공개 여부를 입력해주세요."),
+    
 
     /**
      * 3000 : Response 오류
@@ -76,6 +79,10 @@ public enum BaseResponseStatus {
 
     FAILED_TO_MODIFY_USERNAME(false,3040,"14일 이내에 이름 변경은 최대 2번입니다."),
     FAILED_TO_MODIFY_NICKNAME(false,3050,"14일 이내에 사용자 이름 변경은 최대 2번입니다."),
+
+
+    ALREADY_PUBLIC_ACCOUNT(false,3060,"이미 공개 계정 상태입니다."),
+    ALREADY_PRIVATE_ACCOUNT(false,3070,"이미 비공개 계정 상태입니다."),
 
 
 
