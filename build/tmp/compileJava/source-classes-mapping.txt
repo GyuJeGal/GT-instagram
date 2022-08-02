@@ -14,8 +14,8 @@ com/example/demo/src/user/model/KakaoUser.java
  com.example.demo.src.user.model.KakaoUser
 com/example/demo/src/user/model/UserName.java
  com.example.demo.src.user.model.UserName
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
+com/example/demo/src/user/model/GetFollow.java
+ com.example.demo.src.user.model.GetFollow
 com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
 com/example/demo/src/user/model/PatchUserReq.java
@@ -36,17 +36,17 @@ com/example/demo/src/user/model/User.java
  com.example.demo.src.user.model.User
 com/example/demo/src/user/model/PhoneNumber.java
  com.example.demo.src.user.model.PhoneNumber
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
-com/example/demo/config/BaseResponseStatus.java
- com.example.demo.config.BaseResponseStatus
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
+com/example/demo/config/BaseResponseStatus.java
+ com.example.demo.config.BaseResponseStatus
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
-com/example/demo/src/user/model/GetFollow.java
- com.example.demo.src.user.model.GetFollow
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse

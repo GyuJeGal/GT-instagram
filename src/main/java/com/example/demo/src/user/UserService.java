@@ -251,6 +251,33 @@ public class UserService {
 
     }
 
+    public void acceptFollow(long userId, long followId) throws BaseException {
+        try {
+            // 요청 받은 사용자 ID와 팔로우 요청받은 사용자 ID가 다른 경우
+            if(userDao.getUserIdForFollow(followId) != userId) {
+                throw new BaseException(FAILED_TO_ACCEPT_FOLLOW);
+            }
+            
+            int followStatus = userDao.getFollowStatus(followId);
+            // 팔로우 요청 상태가 이미 승인된 경우
+            if(followStatus == 1) {
+                throw new BaseException(ALREADY_FOLLOW);
+            }
+            // 팔로우 요청 상태가 이미 취소된 경우
+            else if(followStatus == -1) {
+                throw new BaseException(ALREADY_UNFOLLOW);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            userDao.acceptFollow(followId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크
