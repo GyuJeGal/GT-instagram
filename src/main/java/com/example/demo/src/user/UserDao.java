@@ -189,6 +189,12 @@ public class UserDao {
         this.jdbcTemplate.update(updateQuery, followId);
     }
 
+    public void rejectFollow(long followId) {
+        // 팔로우 취소: -1, 팔로우 승인 대기 중: 0, 팔로우 중: 1
+        String updateQuery = "update Follow set status = -1 where followId = ?";
+        this.jdbcTemplate.update(updateQuery, followId);
+    }
+
 
 //
 //    public User getPwd(PostLoginReq postLoginReq) {

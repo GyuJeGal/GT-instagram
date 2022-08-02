@@ -95,8 +95,10 @@ public enum BaseResponseStatus {
 
     ALREADY_UNFOLLOW(false,3090,"이미 언팔로우 상태입니다."),
     
-    FAILED_TO_ACCEPT_FOLLOW(false,3100,"잘못된 팔로우 승인입니다."),
-    
+    FAILED_TO_ACCEPT_FOLLOW(false,3100,"잘못된 팔로우 요청 승인입니다."),
+
+    FAILED_TO_REJECT_FOLLOW(false,3110,"잘못된 팔로우 요청 취소입니다."),
+
 
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),

@@ -359,7 +359,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/follows/{followId}")
+    @PostMapping("{userId}/follows/{followId}")
     @ApiOperation(value = "팔로우 요청 승인")
     public BaseResponse<String> acceptFollow(@PathVariable("userId") long userId, @PathVariable("followId") long followId) {
         try {
@@ -371,6 +371,27 @@ public class UserController {
             userService.acceptFollow(userId, followId);
 
             String result = "팔로우 요청 승인 성공!";
+
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("{userId}/follows/{followId}")
+    @ApiOperation(value = "팔로우 요청 취소")
+    public BaseResponse<String> rejectFollow(@PathVariable("userId") long userId, @PathVariable("followId") long followId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.rejectFollow(userId, followId);
+
+            String result = "팔로우 요청 취소 성공!";
 
             return new BaseResponse<>(result);
 
