@@ -287,6 +287,27 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("{userId}/{followUserId}/follows")
+    @ApiOperation(value = "팔로우 신청")
+    public BaseResponse<String> followUser(@PathVariable("userId") long userId, @PathVariable("followUserId") long followUserId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.followUser(userId, followUserId);
+
+            String result = "팔로우 신청 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 //    @ResponseBody
 //    @PostMapping("")
 //    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {

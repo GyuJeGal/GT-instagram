@@ -124,6 +124,33 @@ public class UserDao {
         this.jdbcTemplate.update(updateQuery, userId);
     }
 
+    public int checkFollow(long userId, long followUserId) {
+        String checkFollowQuery = "select exists (select followId from Follow where followingUserId = ? and followedUserId = ?)";
+        Object[] params = new Object[] {userId, followUserId};
+        return this.jdbcTemplate.queryForObject(checkFollowQuery, int.class, params);
+    }
+
+    public int getFollowStatus(long userId, long followUserId) {
+        String getFollowStatusQuery = "select exists (select status from Follow where followingUserId = ? and followedUserId = ?)";
+        Object[] params = new Object[] {userId, followUserId};
+        return this.jdbcTemplate.queryForObject(getFollowStatusQuery, int.class, params);
+    }
+
+    public void followUser(long userId, long followUserId) {
+        // 팔로우할 대상이 공개 계정인 경우
+        if(getUserOpenStatus(followUserId) == 1) {
+            String insertQuery = "insert into Follow (followingUserId, followedUserId) VALUES (?,?)";
+            Object[] params = new Object[] {userId, followUserId};
+            this.jdbcTemplate.update(insertQuery, params);
+        }
+        // 팔로우할 대상이 비공개 계정인 경우
+        else {
+            String insertQuery = "insert into Follow (followingUserId, followedUserId, status) VALUES (?,?,?)";
+            Object[] params = new Object[] {userId, followUserId, 0};
+            this.jdbcTemplate.update(insertQuery, params);
+        }
+    }
+
 
 //
 //    public User getPwd(PostLoginReq postLoginReq) {

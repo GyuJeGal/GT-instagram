@@ -83,6 +83,10 @@ public enum BaseResponseStatus {
 
     ALREADY_PUBLIC_ACCOUNT(false,3060,"이미 공개 계정 상태입니다."),
     ALREADY_PRIVATE_ACCOUNT(false,3070,"이미 비공개 계정 상태입니다."),
+    
+    ALREADY_FOLLOW(false,3080,"이미 팔로우 상태입니다."),
+    ALREADY_FOLLOW_REQUEST(false,3081,"이미 팔로우 요청 상태입니다."),
+    ALREADY_UNFOLLOW(false,3090,"이미 언팔로우 상태입니다."),
 
 
 

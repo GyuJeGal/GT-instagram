@@ -195,6 +195,31 @@ public class UserService {
         }
     }
 
+    public void followUser(long userId, long followUserId) throws BaseException {
+        try {
+            // 팔로우가 이미 되어있는 경우
+            if (userDao.checkFollow(userId, followUserId) == 1) {
+                // 팔로우가 된 상태인 경우
+                if(userDao.getFollowStatus(userId, followUserId) == 1) {
+                    throw new BaseException(ALREADY_FOLLOW);
+                }
+                // 상대방이 비공개 계정으로서 팔로우 요청 상태인 경우
+                else {
+                    throw new BaseException(ALREADY_FOLLOW_REQUEST);
+                }
+
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            userDao.followUser(userId, followUserId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크
