@@ -267,6 +267,26 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("{userId}/status")
+    @ApiOperation(value = "회원 탈퇴")
+    public BaseResponse<String> deleteUser(@PathVariable("userId") long userId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            userService.deleteUser(userId);
+
+            String result = "회원 탈퇴 성공!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 //    @ResponseBody
 //    @PostMapping("")
 //    public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {

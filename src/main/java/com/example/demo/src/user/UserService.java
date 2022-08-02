@@ -187,6 +187,14 @@ public class UserService {
         }
     }
 
+    public void deleteUser(long userId) throws BaseException {
+        try {
+            userDao.deleteUser(userId);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 //
 //    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
 //        //이메일 존재하는지 체크

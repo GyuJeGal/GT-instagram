@@ -118,6 +118,12 @@ public class UserDao {
         this.jdbcTemplate.update(updateQuery, updateParams);
     }
 
+    public void deleteUser(long userId) {
+        // 회원 탈퇴: -1, 차단 계정: 0, 정상 회원: 1, 휴면 계정: 2
+        String updateQuery = "update User set status = -1 where userId = ?";
+        this.jdbcTemplate.update(updateQuery, userId);
+    }
+
 
 //
 //    public User getPwd(PostLoginReq postLoginReq) {
