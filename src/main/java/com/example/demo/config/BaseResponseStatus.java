@@ -102,6 +102,8 @@ public enum BaseResponseStatus {
 
     FAILED_TO_REJECT_FOLLOW(false,3110,"잘못된 팔로우 요청 취소입니다."),
 
+    STILL_ENABLE_PRIVACY(false,3120,"이전의 개인정보 처리 방침 동의가 아직 유효합니다."),
+
 
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),

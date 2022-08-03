@@ -307,7 +307,7 @@ public class UserService {
 
 
     public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
-        //이메일 존재하는지 체크
+        // 아이디 존재하는지 체크
         if(userDao.checkUser(postLoginReq.getLoginId()) == 0) {
             throw new BaseException(FAILED_TO_LOGIN);
         }
@@ -417,128 +417,21 @@ public class UserService {
     }
 
 
+    public void insertUserPrivacy(long userId) throws BaseException {
+        try {
+            // 개인정보 처리 방침 동의가 이미 유효한 경우
+            if (userDao.getUserPrivacy(userId) == 1) {
+                throw new BaseException(STILL_ENABLE_PRIVACY);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
 
-//
-//    public GetUserInfo getUser(long userId) throws BaseException {
-//        try {
-//            GetUserInfo getUserInfo = userDao.getUser(userId);
-//            return getUserInfo;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public void deleteUser(long userId) throws BaseException {
-//        try {
-//             userDao.deleteUser(userId);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public GetUserDetail getUserDetail(long userId) throws BaseException {
-//        try {
-//            GetUserDetail getUserDetail = userDao.getUserDetail(userId);
-//            return getUserDetail;
-//
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public void modifyUserProfile(long userId, String imgUrl) throws BaseException {
-//        try {
-//            userDao.modifyUserProfile(userId, imgUrl);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//
-//    }
-//
-//    public void modifyUserName(long userId, String userName) throws BaseException {
-//        try {
-//            userDao.modifyUserName(userId, userName);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public void modifyUserEmail(long userId, String email) throws BaseException {
-//        try {
-//            userDao.modifyUserEmail(userId, email);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public void modifyUserBirthDay(long userId, String birthDay) throws BaseException {
-//        try {
-//            userDao.modifyUserBirthDay(userId, birthDay);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public void modifyUserGender(long userId, Character gender) throws BaseException {
-//        try {
-//            userDao.modifyUserGender(userId, gender);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public void modifyUserPhoneNumber(long userId, String phoneNumber) throws BaseException {
-//        try {
-//            userDao.modifyUserPhoneNumber(userId, phoneNumber);
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public GetBasketProduct getBasketProducts(long userId) throws BaseException {
-//        try {
-//             GetBasketProduct getBasketProduct = userDao.getBasketProducts(userId);
-//             return getBasketProduct;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public List<GetOrderList> getOrderList(long userId) throws BaseException {
-//        try {
-//            List<GetOrderList> getOrderLists = userDao.getOrderList(userId);
-//            return getOrderLists;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public List<GetLikeProduct> getLikeProducts(long userId) throws BaseException {
-//        try {
-//            List<GetLikeProduct> getLikeProductList = userDao.getLikeProducts(userId);
-//            return getLikeProductList;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public List<GetLikeOnlineClasses> getLikeOnlineClasses(long userId) throws BaseException {
-//        try {
-//            List<GetLikeOnlineClasses> getLikeOnlineClasses = userDao.getLikeOnlineClasses(userId);
-//            return getLikeOnlineClasses;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
-//    public List<GetLikeOfflineClasses> getLikeOfflineClasses(long userId) throws BaseException {
-//        try {
-//            List<GetLikeOfflineClasses> getLikeOfflineClasses = userDao.getLikeOfflineClasses(userId);
-//            return getLikeOfflineClasses;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
-//
+        try {
+            userDao.insertUserPrivacy(userId);
 
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
