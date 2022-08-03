@@ -63,7 +63,7 @@ public class UserController {
             return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
         }
 
-        String passwordPattern = "^(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{6,}";
+        String passwordPattern = "^(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{6,20}";
         if(!Pattern.matches(passwordPattern, postUserReq.getPassword())) {
             return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
         }
@@ -106,6 +106,51 @@ public class UserController {
         }
 
     }
+
+    @ResponseBody
+    @PostMapping("login")
+    @ApiOperation(value = "자체 로그인")
+    public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq) {
+
+        if(postLoginReq.getLoginId() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_LOGIN_ID);
+        }
+
+        if(postLoginReq.getLoginId().length() < 3 || postLoginReq.getLoginId().length() > 20) {
+            return new BaseResponse<>(POST_USERS_OVERFLOW_LOGIN_ID);
+        }
+
+        if(postLoginReq.getPassword() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+        }
+
+        String passwordPattern = "^(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{6,20}";
+        if(!Pattern.matches(passwordPattern, postLoginReq.getPassword())) {
+            return new BaseResponse<>(POST_USERS_INVALID_PASSWORD);
+        }
+
+        try {
+            PostLoginRes postLoginRes = userService.login(postLoginReq);
+            return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+    }
+
+//    @ResponseBody
+//    @GetMapping("/kakao-login")
+//    public BaseResponse<KakaoUser> kakaoLogIn(@RequestParam("code") String code) {
+//        if(code == null) {
+//            return new BaseResponse<>(REQUEST_ERROR);
+//        }
+//        try {
+//
+//            return new BaseResponse<>(userService.kakaoLogIn(code));
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>(exception.getStatus());
+//        }
+//    }
 
     @ResponseBody
     @PostMapping("/nicknames")
@@ -757,20 +802,6 @@ public class UserController {
 //            List<GetLikeOfflineClasses> getLikeOfflineClasses = userService.getLikeOfflineClasses(userId);
 //            return new BaseResponse<>(getLikeOfflineClasses);
 //
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/kakao-login")
-//    public BaseResponse<KakaoUser> kakaoLogIn(@RequestParam("code") String code) {
-//        if(code == null) {
-//            return new BaseResponse<>(REQUEST_ERROR);
-//        }
-//        try {
-//
-//            return new BaseResponse<>(userService.kakaoLogIn(code));
 //        } catch (BaseException exception) {
 //            return new BaseResponse<>(exception.getStatus());
 //        }

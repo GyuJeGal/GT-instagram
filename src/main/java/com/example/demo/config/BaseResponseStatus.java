@@ -38,7 +38,7 @@ public enum BaseResponseStatus {
     POST_USERS_OVER_LENGTH_NAME(false,2041,"이름은 최대 20자까지 입력해주세요."),
 
     POST_USERS_EMPTY_PASSWORD(false,2050,"비밀 번호를 입력해주세요."),
-    POST_USERS_INVALID_PASSWORD(false,2051,"비밀 번호는 특수문자 포함 6자 이상입니다."),
+    POST_USERS_INVALID_PASSWORD(false,2051,"비밀 번호는 특수문자 포함 6자 이상 20자리 이하입니다."),
 
     POST_USERS_EMPTY_BIRTHDAY(false,2060,"생일을 입력해주세요."),
     POST_USERS_INVALID_BIRTHDAY(false,2061,"잘못된 생일 형식입니다."),
@@ -49,6 +49,10 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_NICKNAME(false,2080,"사용자 이름을 입력해주세요."),
     POST_USERS_OVER_LENGTH_NICKNAME(false,2081,"사용자 이름은 최대 20자까지 입력해주세요."),
     POST_USERS_INVALID_NICKNAME(false,2082,"아이디는 영어, 숫자, '_', '.'만 사용 가능합니다."),
+
+    // [POST] /users/login
+    POST_USERS_EMPTY_LOGIN_ID(false, 2090, "아이디를 입력해주세요."),
+    POST_USERS_OVERFLOW_LOGIN_ID(false, 2091, "아이디는 3자리 이상 20자리 이하입니다."),
 
     // [PATCH] /users/{userId}/usernames
     PATCH_USERS_EMPTY_USERNAME(false,2100,"이름을 입력해주세요."),
@@ -74,9 +78,8 @@ public enum BaseResponseStatus {
     // Common
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),
 
-    // [POST] /users
-    DUPLICATED_EMAIL(false, 3010, "중복된 이메일입니다."),
-    FAILED_TO_LOGIN(false,3014,"없는 이메일이거나 비밀번호가 틀렸습니다."),
+    FAILED_TO_LOGIN(false,3010,"없는 아이디이거나 비밀번호가 틀렸습니다."),
+
 
     POST_USERS_EXISTS_PHONENUMBER(false,3020,"중복된 휴대폰 번호입니다."),
 

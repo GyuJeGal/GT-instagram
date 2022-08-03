@@ -195,15 +195,18 @@ public class UserDao {
         this.jdbcTemplate.update(updateQuery, followId);
     }
 
+    public int checkUser(String loginId) {
+        String checkUserQuery = "select exists (select userId from User where nickName = ?)";
+        return this.jdbcTemplate.queryForObject(checkUserQuery, int.class, loginId);
+    }
 
-//
-//    public User getPwd(PostLoginReq postLoginReq) {
-//        String getPwdQuery = "select userId, password from User where emailAddr = ?";
-//        String getPwdParam = postLoginReq.getEmail();
-//        return this.jdbcTemplate.queryForObject(getPwdQuery, (rs, rowNum) ->
-//                new User(rs.getLong("userId"), rs.getString("password")), getPwdParam);
-//    }
-//
+    public User getPwd(PostLoginReq postLoginReq) {
+        String getPwdQuery = "select userId, password from User where nickName = ?";
+        String param = postLoginReq.getLoginId();
+        return this.jdbcTemplate.queryForObject(getPwdQuery, (rs, rowNum) ->
+                new User(rs.getLong("userId"), rs.getString("password")), param);
+    }
+
 //    public GetUserInfo getUser(long userId) {
 //        String getUserQuery = "select U.profileImg, case when U.grade = 1 then '아기손' when U.grade = 2 then '곰손' when U.grade = 3 then '은손' else '금손' end as grade, U.nickName, U.rewardPoint, UC.countCoupon\n" +
 //                "from User U\n" +

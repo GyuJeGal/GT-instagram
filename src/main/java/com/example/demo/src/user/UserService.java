@@ -305,34 +305,36 @@ public class UserService {
         }
     }
 
-//
-//    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
-//        //이메일 존재하는지 체크
-//        if(userDao.checkEmail(postLoginReq.getEmail()) == 0) {
-//            throw new BaseException(FAILED_TO_LOGIN);
-//        }
-//
-//        User user = userDao.getPwd(postLoginReq);
-//
-//        //비밀 번호 암호화
-//        String encryptedPassword;
-//        try {
-//            encryptedPassword = new SHA256().encrypt(postLoginReq.getPassword());
-//        } catch (Exception exception) {
-//            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
-//        }
-//        if(user.getPassword().equals(encryptedPassword)) {
-//            long userId = user.getUserId();
-//            String jwt = jwtService.createJwt(userId);
-//            return new PostLoginRes(jwt, userId);
-//        }
-//        else {
-//            throw new BaseException(FAILED_TO_LOGIN);
-//        }
-//
-//
-//
-//    }
+
+    public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
+        //이메일 존재하는지 체크
+        if(userDao.checkUser(postLoginReq.getLoginId()) == 0) {
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+        User user = userDao.getPwd(postLoginReq);
+
+        //비밀 번호 암호화
+        String encryptedPassword;
+        try {
+            encryptedPassword = new SHA256().encrypt(postLoginReq.getPassword());
+        } catch (Exception exception) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+
+        //비밀 번호가 일치할 때
+        if(user.getPassword().equals(encryptedPassword)) {
+            long userId = user.getUserId();
+            String jwt = jwtService.createJwt(userId);
+            return new PostLoginRes(jwt, userId);
+        }
+        //비밀 번호가 일치하지 않을 때
+        else {
+            throw new BaseException(FAILED_TO_LOGIN);
+        }
+
+    }
+
 //
 //    public GetUserInfo getUser(long userId) throws BaseException {
 //        try {
