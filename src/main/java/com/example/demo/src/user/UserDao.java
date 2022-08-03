@@ -119,7 +119,7 @@ public class UserDao {
     }
 
     public void deleteUser(long userId) {
-        // 회원 탈퇴: -1, 차단 계정: 0, 정상 회원: 1, 휴면 계정: 2
+        // 회원 탈퇴: -1, 차단 계정: 0, 정상 회원: 1, 휴면 계정: 2, 카카오 회원 가입 대기 중: 3
         String updateQuery = "update User set status = -1 where userId = ?";
         this.jdbcTemplate.update(updateQuery, userId);
     }
@@ -205,6 +205,25 @@ public class UserDao {
         String param = postLoginReq.getLoginId();
         return this.jdbcTemplate.queryForObject(getPwdQuery, (rs, rowNum) ->
                 new User(rs.getLong("userId"), rs.getString("password")), param);
+    }
+
+    public int checkUserId(Long userId) {
+        String checkQuery = "select exists (select userId from User where userId=? and status = 1)";
+        return this.jdbcTemplate.queryForObject(checkQuery, int.class, userId);
+    }
+
+    public void createKakaoUser(Long userId) {
+        String createKakaoUserQuery = "insert into User (userId) VALUES (?)";
+
+        this.jdbcTemplate.update(createKakaoUserQuery, userId);
+    }
+
+    public void updateKakaoUser(Long userId, KakaoUserReq kakaoUserReq) {
+        String updateQuery = "update User set status = 1 and userName = ? and nickName = ? and phoneNumber = ? and birthDay = ? where userId = ?";
+        Object[] params = new Object[] {kakaoUserReq.getUserName(), kakaoUserReq.getNickName(),
+                kakaoUserReq.getPhoneNumber(), kakaoUserReq.getBirthDay(), userId};
+
+        this.jdbcTemplate.update(updateQuery, params);
     }
 
 //    public GetUserInfo getUser(long userId) {
@@ -424,8 +443,5 @@ public class UserDao {
 //        return getLikeOfflineClasses;
 //    }
 //
-//    public int checkUserId(Long userId) {
-//        String checkQuery = "select exists (select userId from User where userId=?)";
-//        return this.jdbcTemplate.queryForObject(checkQuery, int.class, userId);
-//    }
+
 }

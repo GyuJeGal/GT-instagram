@@ -138,19 +138,87 @@ public class UserController {
 
     }
 
-//    @ResponseBody
-//    @GetMapping("/kakao-login")
-//    public BaseResponse<KakaoUser> kakaoLogIn(@RequestParam("code") String code) {
-//        if(code == null) {
-//            return new BaseResponse<>(REQUEST_ERROR);
-//        }
-//        try {
-//
-//            return new BaseResponse<>(userService.kakaoLogIn(code));
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
+    @ResponseBody
+    @PostMapping("/kakao-login")
+    @ApiOperation(value = "카카오 로그인")
+    public BaseResponse<KakaoUserRes> kakaoLogIn(@RequestBody KakaoAccessToken accessToken) {
+        if(accessToken.getAccessToken() == null) {
+            return new BaseResponse<>(REQUEST_ERROR);
+        }
+
+        try {
+            KakaoUserRes kakaoUserRes = userService.kakaoLogIn(accessToken.getAccessToken());
+            return new BaseResponse<>(kakaoUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/kakao-login/{userId}")
+    @ApiOperation(value = "카카오 로그인 후 회원 가입")
+    public BaseResponse<String> createKakaoUser(@PathVariable("userId") long userId,
+                                                 @RequestBody KakaoUserReq kakaoUserReq) {
+        if(kakaoUserReq.getPhoneNumber() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_PHONENUMBER);
+        }
+
+        if(kakaoUserReq.getPhoneNumber().length() > 11) {
+            return new BaseResponse<>(POST_USERS_INVALID_PHONENUMBER);
+        }
+
+        String phoneNumberPattern = "^01(?:0|1|[6-9])(\\d{3}|\\d{4})(\\d{4})$";
+        if(!Pattern.matches(phoneNumberPattern, kakaoUserReq.getPhoneNumber())) {
+            return new BaseResponse<>(POST_USERS_INVALID_PHONENUMBER);
+        }
+
+        if(kakaoUserReq.getUserName() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_NAME);
+        }
+
+        if(kakaoUserReq.getUserName().length() > 20) {
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_NAME);
+        }
+
+        if(kakaoUserReq.getBirthDay() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_BIRTHDAY);
+        }
+
+        String birthDayPattern = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$";
+        if(!Pattern.matches(birthDayPattern, kakaoUserReq.getBirthDay())) {
+            return new BaseResponse<>(POST_USERS_INVALID_BIRTHDAY);
+        }
+
+        if(kakaoUserReq.getCheckPrivacy() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_PRIVACY);
+        }
+
+        if(kakaoUserReq.getCheckPrivacy() != true) {
+            return new BaseResponse<>(POST_USERS_INVALID_PRIVACY);
+        }
+
+        if(kakaoUserReq.getNickName() == null) {
+            return new BaseResponse<>(POST_USERS_EMPTY_NICKNAME);
+        }
+
+        if(kakaoUserReq.getNickName().length() > 20) {
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_NICKNAME);
+        }
+
+        String nickNamePattern = "^[a-z0-9._]{1,20}$";
+        if(!Pattern.matches(nickNamePattern, kakaoUserReq.getNickName())) {
+            return new BaseResponse<>(POST_USERS_INVALID_NICKNAME);
+        }
+
+        try {
+            userService.createKakaoUser(userId, kakaoUserReq);
+
+            String result = "카카오 회원 가입 완료!";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
     @ResponseBody
     @PostMapping("/nicknames")
