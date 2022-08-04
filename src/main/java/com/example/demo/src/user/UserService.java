@@ -552,4 +552,31 @@ public class UserService {
         }
 
     }
+
+    public void updatePassword(UpdatePasswordReq updatePasswordReq) throws BaseException {
+        try {
+            String phoneNumber = updatePasswordReq.getPhoneNumber();
+            if(userDao.checkPhoneNumber(phoneNumber) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_USER);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        //비밀 번호 암호화
+        try {
+            String pwd = new SHA256().encrypt(updatePasswordReq.getPassword());
+            updatePasswordReq.setPassword(pwd);
+        } catch (Exception exception) {
+            throw new BaseException(PASSWORD_ENCRYPTION_ERROR);
+        }
+
+        try {
+            long userId = userDao.getUserIdByPhoneNumber(updatePasswordReq.getPhoneNumber());
+            userDao.updatePassword(userId, updatePasswordReq.getPassword());
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 }

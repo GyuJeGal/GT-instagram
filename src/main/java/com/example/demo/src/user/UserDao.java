@@ -363,4 +363,16 @@ public class UserDao {
                 rs.getInt("countFollowing"),
                 followStatus), visitUserId);
     }
+
+    public long getUserIdByPhoneNumber(String phoneNumber) {
+        String getUserQuery = "select userId from User where phoneNumber = ?";
+        return this.jdbcTemplate.queryForObject(getUserQuery, long.class, phoneNumber);
+    }
+
+    public void updatePassword(long userId, String password) {
+        String updateQuery = "update User set password = ? where userId = ?";
+        Object[] updateParams = new Object[] {password, userId};
+
+        this.jdbcTemplate.update(updateQuery, updateParams);
+    }
 }

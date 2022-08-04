@@ -52,15 +52,15 @@ public enum BaseResponseStatus {
 
     // [POST] /users/login
     POST_USERS_EMPTY_LOGIN_ID(false, 2090, "아이디를 입력해주세요."),
-    POST_USERS_OVERFLOW_LOGIN_ID(false, 2091, "아이디는 3자리 이상 20자리 이하입니다."),
+    POST_USERS_OVER_LENGTH_LOGIN_ID(false, 2091, "아이디는 3자리 이상 20자리 이하입니다."),
 
     // [PATCH] /users/{userId}/usernames
     PATCH_USERS_EMPTY_USERNAME(false,2100,"이름을 입력해주세요."),
-    PATCH_USERS_OVERFLOW_USERNAME(false,2101,"이름은 최대 20자까지 입력해주세요."),
+    PATCH_USERS_OVER_LENGTH_USERNAME(false,2101,"이름은 최대 20자까지 입력해주세요."),
 
     // [PATCH] /users/{userId}/nicknames
     PATCH_USERS_EMPTY_NICKNAME(false,2110,"사용자 이름을 입력해주세요."),
-    PATCH_USERS_OVERFLOW_NICKNAME(false,2111,"사용자 이름은 최대 20자까지 입력해주세요."),
+    PATCH_USERS_OVER_LENGTH_NICKNAME(false,2111,"사용자 이름은 최대 20자까지 입력해주세요."),
 
     // [PATCH] /users/{userId}/open-status
     PATCH_USERS_EMPTY_STATUS(false,2120,"공개/비공개 여부를 입력해주세요."),
@@ -70,10 +70,17 @@ public enum BaseResponseStatus {
     
     // [PATCH] /users/{userId}/{unfollowUserId}/follows
     PATCH_USERS_INVALID_UNFOLLOW(false,2140,"본인에게는 팔로우 취소가 불가합니다."),
-    
+
+    // [PATCH] /users/password
+    PATCH_USERS_EMPTY_PHONENUMBER(false,2150,"휴대폰 번호를 입력해주세요."),
+    PATCH_USERS_INVALID_PHONENUMBER(false,2151,"잘못된 휴대폰 번호입니다."),
+
+    PATCH_USERS_EMPTY_PASSWORD(false,2160,"비밀번호를 입력해주세요."),
+    PATCH_USERS_INVALID_PASSWORD(false,2161,"잘못된 비밀번호입니다."),
+
     // 페이징 관련 요청 오류
-    EMPTY_PAGE_INDEX(false,2150,"페이지 인덱스 값이 필요합니다."),
-    INVALID_PAGE_INDEX(false,2151,"잘못된 페이지 인덱스입니다."),
+    EMPTY_PAGE_INDEX(false,2200,"페이지 인덱스 값이 필요합니다."),
+    INVALID_PAGE_INDEX(false,2201,"잘못된 페이지 인덱스입니다."),
 
 
 
@@ -110,6 +117,7 @@ public enum BaseResponseStatus {
 
     STILL_ENABLE_PRIVACY(false,3120,"이전의 개인정보 처리 방침 동의가 아직 유효합니다."),
 
+    FAILED_TO_SEARCH_USER(false,3130,"해당 사용자를 찾을 수 없습니다."),
 
 
 

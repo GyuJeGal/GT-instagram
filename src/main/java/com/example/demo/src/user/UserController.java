@@ -117,7 +117,7 @@ public class UserController {
         }
 
         if(postLoginReq.getLoginId().length() < 3 || postLoginReq.getLoginId().length() > 20) {
-            return new BaseResponse<>(POST_USERS_OVERFLOW_LOGIN_ID);
+            return new BaseResponse<>(POST_USERS_OVER_LENGTH_LOGIN_ID);
         }
 
         if(postLoginReq.getPassword() == null) {
@@ -297,7 +297,7 @@ public class UserController {
         }
 
         if(userName.getUserName().length() > 20) {
-            return new BaseResponse<>(PATCH_USERS_OVERFLOW_USERNAME);
+            return new BaseResponse<>(PATCH_USERS_OVER_LENGTH_USERNAME);
         }
 
         try {
@@ -325,7 +325,7 @@ public class UserController {
         }
 
         if(nickName.getNickName().length() >= 20) {
-            return new BaseResponse<>(PATCH_USERS_OVERFLOW_NICKNAME);
+            return new BaseResponse<>(PATCH_USERS_OVER_LENGTH_NICKNAME);
         }
 
         String nickNamePattern = "^[a-z0-9._]{1,20}$";
@@ -584,7 +584,41 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/password")
+    @ApiOperation(value = "비밀번호 찾기(변경)")
+    public BaseResponse<String> updatePassword(@RequestBody UpdatePasswordReq updatePasswordReq) {
+        if(updatePasswordReq.getPhoneNumber() == null) {
+            return new BaseResponse<>(PATCH_USERS_EMPTY_PHONENUMBER);
+        }
 
+        if(updatePasswordReq.getPhoneNumber().length() > 11) {
+            return new BaseResponse<>(PATCH_USERS_INVALID_PHONENUMBER);
+        }
+
+        String phoneNumberPattern = "^01(?:0|1|[6-9])(\\d{3}|\\d{4})(\\d{4})$";
+        if(!Pattern.matches(phoneNumberPattern, updatePasswordReq.getPhoneNumber())) {
+            return new BaseResponse<>(PATCH_USERS_INVALID_PHONENUMBER);
+        }
+
+        if(updatePasswordReq.getPassword() == null) {
+            return new BaseResponse<>(PATCH_USERS_EMPTY_PASSWORD);
+        }
+
+        String passwordPattern = "^(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{6,20}";
+        if(!Pattern.matches(passwordPattern, updatePasswordReq.getPassword())) {
+            return new BaseResponse<>(PATCH_USERS_INVALID_PASSWORD);
+        }
+
+        try {
+            userService.updatePassword(updatePasswordReq);
+            String result = "비밀번호 재설정 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }
 
