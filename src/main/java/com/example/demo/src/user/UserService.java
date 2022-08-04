@@ -434,4 +434,36 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public GetMyPageRes getMyPage(long userId, int pageIndex) throws BaseException {
+        try {
+            // 게시글 개수가 9개가 안될때
+            int countUserPosts = userDao.countUserPost(userId);
+            int maxIndex = countUserPosts/9 + 1;
+            
+            if (countUserPosts < 9) {
+                // 요청한 페이지 인덱스가 1을 초과할때
+                if(pageIndex > 1) {
+                    throw new BaseException(INVALID_PAGE_INDEX);
+                }
+            }
+            // 게시글 개수가 9개를 넘을때
+            else {
+                // 요청한 페이지 인덱스가 최대 인덱스를 초과할때
+                if(pageIndex > maxIndex) {
+                    throw new BaseException(INVALID_PAGE_INDEX);
+                }
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            return userDao.getMyPage(userId, pageIndex);
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

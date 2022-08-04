@@ -40,19 +40,33 @@ com/example/demo/src/user/model/KakaoUserRes.java
  com.example.demo.src.user.model.KakaoUserRes
 com/example/demo/src/user/model/KakaoAccessToken.java
  com.example.demo.src.user.model.KakaoAccessToken
-com/example/demo/src/user/UserDao.java
- com.example.demo.src.user.UserDao
-com/example/demo/src/user/UserService.java
- com.example.demo.src.user.UserService
-com/example/demo/config/BaseResponseStatus.java
- com.example.demo.config.BaseResponseStatus
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
+com/example/demo/src/post/PostService.java
+ com.example.demo.src.post.PostService
+com/example/demo/src/post/PostController.java
+ com.example.demo.src.post.PostController
+com/example/demo/src/post/PostDao.java
+ com.example.demo.src.post.PostDao
+com/example/demo/src/user/model/GetMyPageRes.java
+ com.example.demo.src.user.model.GetMyPageRes
 com/example/demo/src/user/UserScheduler.java
  com.example.demo.src.user.UserScheduler
-com/example/demo/src/user/UserController.java
- com.example.demo.src.user.UserController
+com/example/demo/src/user/model/PageInfo.java
+ com.example.demo.src.user.model.PageInfo
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
+com/example/demo/src/user/UserDao.java
+ com.example.demo.src.user.UserDao
+com/example/demo/src/Criteria.java
+ com.example.demo.src.Criteria
+com/example/demo/src/user/model/Post.java
+ com.example.demo.src.user.model.Post
+com/example/demo/config/BaseResponseStatus.java
+ com.example.demo.config.BaseResponseStatus
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
+com/example/demo/src/user/UserService.java
+ com.example.demo.src.user.UserService
+com/example/demo/src/user/UserController.java
+ com.example.demo.src.user.UserController

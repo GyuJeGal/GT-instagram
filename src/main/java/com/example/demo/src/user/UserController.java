@@ -108,7 +108,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("login")
+    @PostMapping("/login")
     @ApiOperation(value = "자체 로그인")
     public BaseResponse<PostLoginRes> login(@RequestBody PostLoginReq postLoginReq) {
 
@@ -248,7 +248,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("{userId}/profiles")
+    @GetMapping("/{userId}/profiles")
     @ApiOperation(value = "프로필 정보 조회")
     public BaseResponse<GetUserInfo> getUserInfo(@PathVariable("userId") long userId) {
         try {
@@ -267,7 +267,7 @@ public class UserController {
 
 
     @ResponseBody
-    @PatchMapping("{userId}/profiles")
+    @PatchMapping("/{userId}/profiles")
     @ApiOperation(value = "프로필 수정(프로필 사진, 웹사이트, 소개)")
     public BaseResponse<String> modifyUserProfile(@PathVariable("userId") long userId, @RequestBody PatchUserReq patchUserReq) {
 
@@ -289,7 +289,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/usernames")
+    @PatchMapping("/{userId}/usernames")
     @ApiOperation(value = "프로필 수정(이름)")
     public BaseResponse<String> modifyUserName(@PathVariable("userId") long userId, @RequestBody UserName userName) {
         if(userName.getUserName() == null) {
@@ -317,7 +317,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/nicknames")
+    @PatchMapping("/{userId}/nicknames")
     @ApiOperation(value = "프로필 수정(사용자 이름)")
     public BaseResponse<String> modifyNickName(@PathVariable("userId") long userId, @RequestBody NickName nickName) {
         if(nickName.getNickName() == null) {
@@ -351,7 +351,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/open-status")
+    @PatchMapping("/{userId}/open-status")
     @ApiOperation(value = "프로필 수정(공개/비공개 설정)")
     public BaseResponse<String> modifyUserStatus(@PathVariable("userId") long userId, @RequestParam("status") Integer status) {
         if(status == null) {
@@ -381,7 +381,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/status")
+    @PatchMapping("/{userId}/status")
     @ApiOperation(value = "회원 탈퇴")
     public BaseResponse<String> deleteUser(@PathVariable("userId") long userId) {
         try {
@@ -401,7 +401,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("{userId}/{followUserId}/follows")
+    @PostMapping("/{userId}/{followUserId}/follows")
     @ApiOperation(value = "팔로우 신청")
     public BaseResponse<String> followUser(@PathVariable("userId") long userId,
                                            @PathVariable("followUserId") long followUserId) {
@@ -427,7 +427,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/{unfollowUserId}/follows")
+    @PatchMapping("/{userId}/{unfollowUserId}/follows")
     @ApiOperation(value = "팔로우 취소")
     public BaseResponse<String> unfollowUser(@PathVariable("userId") long userId,
                                              @PathVariable("unfollowUserId") long unfollowUserId) {
@@ -453,7 +453,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("{userId}/follows")
+    @GetMapping("/{userId}/follows")
     @ApiOperation(value = "팔로우 요청 조회")
     public BaseResponse<List<GetFollow>> getFollows(@PathVariable("userId") long userId) {
         try {
@@ -472,7 +472,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("{userId}/follows/{followId}")
+    @PostMapping("/{userId}/follows/{followId}")
     @ApiOperation(value = "팔로우 요청 승인")
     public BaseResponse<String> acceptFollow(@PathVariable("userId") long userId, @PathVariable("followId") long followId) {
         try {
@@ -493,7 +493,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PatchMapping("{userId}/follows/{followId}")
+    @PatchMapping("/{userId}/follows/{followId}")
     @ApiOperation(value = "팔로우 요청 취소")
     public BaseResponse<String> rejectFollow(@PathVariable("userId") long userId, @PathVariable("followId") long followId) {
         try {
@@ -514,7 +514,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PostMapping("{userId}/privacy")
+    @PostMapping("/{userId}/privacy")
     @ApiOperation(value = "개인정보 처리 방침 동의 등록")
     public BaseResponse<String> insertUserPrivacy(@PathVariable("userId") long userId) {
         try {
@@ -534,6 +534,29 @@ public class UserController {
         }
     }
 
+    @ResponseBody
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "마이페이지 조회")
+    public BaseResponse<GetMyPageRes> getMyPage(@PathVariable("userId") long userId, @RequestParam("pageIndex") int pageIndex) {
+
+        if(pageIndex <= 0) {
+            return new BaseResponse<>(INVALID_PAGE_INDEX);
+        }
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            GetMyPageRes getMyPageRes = userService.getMyPage(userId, pageIndex);
+
+            return new BaseResponse<>(getMyPageRes);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }
 

@@ -70,6 +70,12 @@ public enum BaseResponseStatus {
     
     // [PATCH] /users/{userId}/{unfollowUserId}/follows
     PATCH_USERS_INVALID_UNFOLLOW(false,2140,"본인에게는 팔로우 취소가 불가합니다."),
+    
+    // 페이징 관련 요청 오류
+    EMPTY_PAGE_INDEX(false,2150,"페이지 인덱스 값이 필요합니다."),
+    INVALID_PAGE_INDEX(false,2151,"잘못된 페이지 인덱스입니다."),
+
+
 
 
     /**
@@ -103,6 +109,7 @@ public enum BaseResponseStatus {
     FAILED_TO_REJECT_FOLLOW(false,3110,"잘못된 팔로우 요청 취소입니다."),
 
     STILL_ENABLE_PRIVACY(false,3120,"이전의 개인정보 처리 방침 동의가 아직 유효합니다."),
+
 
 
 

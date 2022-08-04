@@ -249,4 +249,42 @@ public class UserDao {
         String insertUserPrivacyQuery = "insert into UserPrivacy (userId) VALUES (?)";
         this.jdbcTemplate.update(insertUserPrivacyQuery, userId);
     }
+
+    public int countUserPost(long userId) {
+        String countUserPostQuery = "select count(postId) from Post where userId = ?";
+        return this.jdbcTemplate.queryForObject(countUserPostQuery, int.class, userId);
+    }
+
+    public GetMyPageRes getMyPage(long userId, Integer pageIndex) {
+        String getUserInfo = "select U.nickName, U.profileImg, U.userName, CP.countPosts,CF1.countFollower, CF2.countFollowing\n" +
+                "from User U\n" +
+                "left outer join (select userId, count(postId) as countPosts from Post group by (userId)) CP using(userId)\n" +
+                "left outer join (select followedUserId, count(followId) as countFollower from Follow group by (followedUserId)) CF1 on CF1.followedUserId=U.userId\n" +
+                "left outer join (select followingUserId, count(followId) as countFollowing from Follow group by (followingUserId)) CF2 on CF2.followingUserId=U.userId\n" +
+                "where U.userId = ?";
+
+        String getUserPosts = "select P.postId, PI.imgUrl\n" +
+                "from Post P\n" +
+                "inner join (select postId, imgUrl from PostImg group by (postId)) PI using(postId)\n" +
+                "where userId = ? order by(postId) desc limit 0, ?";
+
+        int size = 9 * pageIndex;
+        Object[] params = new Object[] {userId, size};
+
+
+        List<Post> postList = this.jdbcTemplate.query(getUserPosts, (rs, rowNum) -> new Post(
+                rs.getLong("postId"),
+                rs.getString("imgUrl")), params);
+
+        GetMyPageRes getMyPageRes = this.jdbcTemplate.queryForObject(getUserInfo, (rs, rowNum) -> new GetMyPageRes(
+                rs.getString("nickName"),
+                rs.getString("profileImg"),
+                rs.getString("userName"),
+                rs.getInt("countPosts"),
+                rs.getInt("countFollower"),
+                rs.getInt("countFollowing"),
+                postList), userId);
+
+        return getMyPageRes;
+    }
 }
