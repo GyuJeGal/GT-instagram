@@ -256,14 +256,14 @@ public class UserDao {
     }
 
     public GetMyPageRes getMyPage(long userId, Integer pageIndex) {
-        String getUserInfo = "select U.nickName, U.profileImg, U.userName, CP.countPosts,CF1.countFollower, CF2.countFollowing\n" +
+        String getUserInfoQuery = "select U.nickName, U.profileImg, U.userName, U.userIntro, U.webSite, CP.countPosts,CF1.countFollower, CF2.countFollowing\n" +
                 "from User U\n" +
                 "left outer join (select userId, count(postId) as countPosts from Post group by (userId)) CP using(userId)\n" +
                 "left outer join (select followedUserId, count(followId) as countFollower from Follow group by (followedUserId)) CF1 on CF1.followedUserId=U.userId\n" +
                 "left outer join (select followingUserId, count(followId) as countFollowing from Follow group by (followingUserId)) CF2 on CF2.followingUserId=U.userId\n" +
                 "where U.userId = ?";
 
-        String getUserPosts = "select P.postId, PI.imgUrl\n" +
+        String getUserPostsQuery = "select P.postId, PI.imgUrl\n" +
                 "from Post P\n" +
                 "inner join (select postId, imgUrl from PostImg group by (postId)) PI using(postId)\n" +
                 "where userId = ? order by(postId) desc limit 0, ?";
@@ -272,19 +272,95 @@ public class UserDao {
         Object[] params = new Object[] {userId, size};
 
 
-        List<Post> postList = this.jdbcTemplate.query(getUserPosts, (rs, rowNum) -> new Post(
+        List<Post> postList = this.jdbcTemplate.query(getUserPostsQuery, (rs, rowNum) -> new Post(
                 rs.getLong("postId"),
                 rs.getString("imgUrl")), params);
 
-        GetMyPageRes getMyPageRes = this.jdbcTemplate.queryForObject(getUserInfo, (rs, rowNum) -> new GetMyPageRes(
+        GetMyPageRes getMyPageRes = this.jdbcTemplate.queryForObject(getUserInfoQuery, (rs, rowNum) -> new GetMyPageRes(
                 rs.getString("nickName"),
                 rs.getString("profileImg"),
                 rs.getString("userName"),
+                rs.getString("userIntro"),
+                rs.getString("webSite"),
                 rs.getInt("countPosts"),
                 rs.getInt("countFollower"),
                 rs.getInt("countFollowing"),
                 postList), userId);
 
         return getMyPageRes;
+    }
+
+    public GetUserPage GetPublicUserPage(long userId, long visitUserId, int pageIndex) {
+        String getUserInfoQuery = "select U.nickName, U.profileImg, U.userName, U.userIntro, U.webSite, CP.countPosts,CF1.countFollower, CF2.countFollowing\n" +
+                "from User U\n" +
+                "left outer join (select userId, count(postId) as countPosts from Post group by (userId)) CP using(userId)\n" +
+                "left outer join (select followedUserId, count(followId) as countFollower from Follow group by (followedUserId)) CF1 on CF1.followedUserId=U.userId\n" +
+                "left outer join (select followingUserId, count(followId) as countFollowing from Follow group by (followingUserId)) CF2 on CF2.followingUserId=U.userId\n" +
+                "where U.userId = ?";
+
+        String getIsFollowQuery = "select exists(select followId from Follow where followingUserId = ? and followedUserId = ? and status = 1)";
+        Object[] GetIsFollowParams = new Object[] {userId, visitUserId};
+
+        int followStatus;
+        if(this.jdbcTemplate.queryForObject(getIsFollowQuery, int.class, GetIsFollowParams) == 1) {
+            followStatus = 1; // 팔로우 중
+        }
+        else {
+            followStatus = -1; // 언팔로우 상태
+        }
+
+        String getUserPostsQuery = "select P.postId, PI.imgUrl\n" +
+                "from Post P\n" +
+                "inner join (select postId, imgUrl from PostImg group by (postId)) PI using(postId)\n" +
+                "where userId = ? order by(postId) desc limit 0, ?";
+
+        int size = 9 * pageIndex;
+        Object[] getUserPostsParams = new Object[] {visitUserId, size};
+
+
+        List<Post> postList = this.jdbcTemplate.query(getUserPostsQuery, (rs, rowNum) -> new Post(
+                rs.getLong("postId"),
+                rs.getString("imgUrl")), getUserPostsParams);
+
+        GetUserPage getUserPage = this.jdbcTemplate.queryForObject(getUserInfoQuery, (rs, rowNum) -> new GetUserPage(
+                rs.getString("nickName"),
+                rs.getString("profileImg"),
+                rs.getString("userName"),
+                rs.getString("userIntro"),
+                rs.getString("webSite"),
+                rs.getInt("countPosts"),
+                rs.getInt("countFollower"),
+                rs.getInt("countFollowing"),
+                followStatus, postList), visitUserId);
+        return getUserPage;
+    }
+
+    public GetUserPage GetPrivateUserPage(long userId, long visitUserId) {
+        String getUserInfoQuery = "select U.nickName, U.profileImg, U.userName, CP.countPosts,CF1.countFollower, CF2.countFollowing\n" +
+                "from User U\n" +
+                "left outer join (select userId, count(postId) as countPosts from Post group by (userId)) CP using(userId)\n" +
+                "left outer join (select followedUserId, count(followId) as countFollower from Follow group by (followedUserId)) CF1 on CF1.followedUserId=U.userId\n" +
+                "left outer join (select followingUserId, count(followId) as countFollowing from Follow group by (followingUserId)) CF2 on CF2.followingUserId=U.userId\n" +
+                "where U.userId = ?";
+
+        String getIsFollowQuery = "select exists(select followId from Follow where followingUserId = ? and followedUserId = ? and status = 0)";
+        Object[] GetIsFollowParams = new Object[] {userId, visitUserId};
+
+        int followStatus;
+        if(this.jdbcTemplate.queryForObject(getIsFollowQuery, int.class, GetIsFollowParams) == 1) {
+            followStatus = 0; // 팔로우 요청 중
+        }
+        else {
+            followStatus = -1; // 언팔로우 상태
+        }
+
+        return this.jdbcTemplate.queryForObject(getUserInfoQuery, (rs, rowNum) -> new GetUserPage(
+                rs.getString("nickName"),
+                rs.getString("profileImg"),
+                rs.getString("userName"),
+                rs.getInt("countPosts"),
+                rs.getInt("countFollower"),
+                rs.getInt("countFollowing"),
+                followStatus), visitUserId);
     }
 }

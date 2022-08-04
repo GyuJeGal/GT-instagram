@@ -12,7 +12,18 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetMyPageRes {
+public class GetUserPage {
+    public GetUserPage(String nickName, String profileImg, String userName, Integer countPosts,
+                       Integer countFollower, Integer countFollowing, int followStatus) {
+        this.nickName = nickName;
+        this.profileImg = profileImg;
+        this.userName = userName;
+        this.countPosts = countPosts;
+        this.countFollower = countFollower;
+        this.countFollowing = countFollowing;
+        this.followStatus = followStatus;
+    }
+
     @ApiModelProperty(value = "사용자 이름", required = true)
     private String nickName;
 
@@ -37,7 +48,9 @@ public class GetMyPageRes {
     @ApiModelProperty(value = "팔로잉 수", required = true)
     private Integer countFollowing;
 
+    @ApiModelProperty(value = "팔로우 여부", required = true, reference = "-1:언팔로우 상태, 0:팔로우 요청 중, 1:팔로우 중")
+    private int followStatus;
+
     @ApiModelProperty(value = "게시글 리스트", required = true)
     private List<Post> postList;
-
 }

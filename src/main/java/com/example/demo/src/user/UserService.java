@@ -466,4 +466,90 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public GetUserPage GetUserPage(long userId, long visitUserId, int pageIndex) throws BaseException {
+        // 프로필 조회 상태(1:프로필 조회 가능, 0:비공개)
+        int getStatus;
+        
+        try {
+            int countUserPosts = userDao.countUserPost(visitUserId);
+            int maxIndex = countUserPosts/9 + 1;
+
+            // 팔로우 요청 중이거나 팔로우 중일때
+            if(userDao.checkFollow(userId, visitUserId) == 1) {
+                long followId = userDao.getFollowId(userId, visitUserId);
+
+                int followStatus = userDao.getFollowStatus(followId);
+
+                // 팔로우 중일때
+                if(followStatus == 1) {
+                    getStatus = 1;
+
+                    // 게시글 개수가 9개가 안될때
+                    if (countUserPosts < 9) {
+                        // 요청한 페이지 인덱스가 1을 초과할때
+                        if(pageIndex > 1) {
+                            throw new BaseException(INVALID_PAGE_INDEX);
+                        }
+                    }
+                    // 게시글 개수가 9개를 넘을때
+                    else {
+                        // 요청한 페이지 인덱스가 최대 인덱스를 초과할때
+                        if(pageIndex > maxIndex) {
+                            throw new BaseException(INVALID_PAGE_INDEX);
+                        }
+                    }
+                }
+                // 팔로우 요청 중일 때(상대방이 비공개 계정일 때)는 페이지 인덱스 체크X
+                else {
+                    getStatus = 0;
+                }
+
+            }
+            // 언팔로우 상태일 때
+            else {
+                // 공개 프로필 사용자 페이지를 조회했을 때만 페이지 인덱스 체크
+                if(userDao.getUserOpenStatus(visitUserId) == 1) {
+                    getStatus = 1;
+
+                    // 게시글 개수가 9개가 안될때
+                    if (countUserPosts < 9) {
+                        // 요청한 페이지 인덱스가 1을 초과할때
+                        if(pageIndex > 1) {
+                            throw new BaseException(INVALID_PAGE_INDEX);
+                        }
+                    }
+                    // 게시글 개수가 9개를 넘을때
+                    else {
+                        // 요청한 페이지 인덱스가 최대 인덱스를 초과할때
+                        if(pageIndex > maxIndex) {
+                            throw new BaseException(INVALID_PAGE_INDEX);
+                        }
+                    }
+                }
+                // 비공개 프로필 사용자 페이지를 조회했을 때는 페이지 인덱스 체크X
+                else {
+                    getStatus = 0;
+                }
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            // 공개 프로필 사용자 페이지를 조회했을 때(비공개 계정이지만 팔로우된 경우도 포함)
+            if(getStatus == 1) {
+                return userDao.GetPublicUserPage(userId, visitUserId, pageIndex);
+            }
+            // 비공개 프로필 사용자 페이지를 조회했을 때
+            else {
+                return userDao.GetPrivateUserPage(userId, visitUserId);
+            }
+
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+    }
 }

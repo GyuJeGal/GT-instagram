@@ -538,7 +538,7 @@ public class UserController {
     @GetMapping("/{userId}")
     @ApiOperation(value = "마이페이지 조회")
     public BaseResponse<GetMyPageRes> getMyPage(@PathVariable("userId") long userId, @RequestParam("pageIndex") int pageIndex) {
-
+        // 페이지 인덱스는 1부터 시작
         if(pageIndex <= 0) {
             return new BaseResponse<>(INVALID_PAGE_INDEX);
         }
@@ -557,6 +557,34 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/{userId}/{visitUserId}")
+    @ApiOperation(value = "다른 사용자 페이지 조회")
+    public BaseResponse<GetUserPage> GetUserPage(@PathVariable("userId") long userId,
+                                                 @PathVariable("visitUserId") long visitUserId,
+                                                 @RequestParam("pageIndex") int pageIndex) {
+        // 페이지 인덱스는 1부터 시작
+        if(pageIndex <= 0) {
+            return new BaseResponse<>(INVALID_PAGE_INDEX);
+        }
+
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            GetUserPage getUserPage = userService.GetUserPage(userId, visitUserId, pageIndex);
+
+            return new BaseResponse<>(getUserPage);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 
 }
 
