@@ -194,4 +194,16 @@ public class PostDao {
 
         this.jdbcTemplate.update(updateQuery, params);
     }
+
+    public long getUserByPost(long postId) {
+        String getUserByPostQuery = "select userId from Post where postId = ?";
+        return this.jdbcTemplate.queryForObject(getUserByPostQuery, long.class, postId);
+    }
+
+    public void updatePost(long postId, String contents) {
+        String updateQuery = "update Post set contents = ? where postId = ?";
+        Object[] params = new Object[] {contents, postId};
+
+        this.jdbcTemplate.update(updateQuery, params);
+    }
 }

@@ -85,6 +85,7 @@ public enum BaseResponseStatus {
 
     //[POST] /posts/{userId}/{postId}/comments
     POST_POSTS_EMPTY_COMMENT(false,2180,"댓글 내용을 입력해주세요."),
+    POST_POSTS_OVER_LENGTH_COMMENT(false,2185,"댓글은 최대 200자 입력해주세요."),
 
     // 페이징 관련 요청 오류
     EMPTY_PAGE_INDEX(false,2200,"페이지 인덱스 값이 필요합니다."),
@@ -136,6 +137,8 @@ public enum BaseResponseStatus {
     FAILED_TO_SEARCH_COMMENT(false,3170,"댓글을 찾을 수 없습니다."),
     ALREADY_COMMENT_LIKE(false,3180,"이미 댓글 좋아요 상태입니다."),
     ALREADY_COMMENT_UNLIKE(false,3185,"이미 댓글 좋아요 취소 상태입니다."),
+
+    FAILED_TO_UPDATE_POST(false,3190,"게시글 수정에 실패하였습니다."),
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),
 

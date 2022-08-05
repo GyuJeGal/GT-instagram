@@ -196,4 +196,26 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void updatePost(long userId, long postId, String contents) throws BaseException {
+        try {
+            // 게시글이 존재하지 않는 경우
+            if(postDao.checkPostExists(postId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_POST);
+            }
+
+            // 본인 게시글이 아닌 경우
+            if(postDao.getUserByPost(postId) != userId) {
+                throw new BaseException(FAILED_TO_UPDATE_POST);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.updatePost(postId, contents);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

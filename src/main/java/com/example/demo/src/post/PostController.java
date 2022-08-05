@@ -2,10 +2,7 @@ package com.example.demo.src.post;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.post.model.CreatePostReq;
-import com.example.demo.src.post.model.GetPostCommentsRes;
-import com.example.demo.src.post.model.GetPostRes;
-import com.example.demo.src.post.model.SetPostCommentReq;
+import com.example.demo.src.post.model.*;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserPage;
 import com.example.demo.utils.JwtService;
@@ -82,6 +79,32 @@ public class PostController {
             postService.createPost(userId, createPostReq);
 
             String result = "게시글 작성 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/{userId}/{postId}")
+    @ApiOperation(value = "게시글 수정")
+    public BaseResponse<String> updatePost(@PathVariable("userId") long userId,
+                                           @PathVariable("postId") long postId,
+                                           @RequestBody PostContents postContents) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(postContents.getContents().length() > 1000) {
+                return new BaseResponse<>(POST_POSTS_OVER_LENGTH_CONTENTS);
+            }
+
+            postService.updatePost(userId, postId, postContents.getContents());
+
+            String result = "게시글 수정 완료!";
             return new BaseResponse<>(result);
 
         } catch (BaseException exception) {
@@ -168,6 +191,10 @@ public class PostController {
 
             if(setPostCommentReq.getContents().length() == 0) {
                 return new BaseResponse<>(POST_POSTS_EMPTY_COMMENT);
+            }
+
+            if(setPostCommentReq.getContents().length() > 200) {
+                return new BaseResponse<>(POST_POSTS_OVER_LENGTH_COMMENT);
             }
 
             postService.setPostComment(userId, postId, setPostCommentReq.getContents());
