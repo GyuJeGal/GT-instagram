@@ -180,6 +180,46 @@ public class PostController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/{userId}/comments/{commentId}/likes")
+    @ApiOperation(value = "댓글 좋아요 설정")
+    public BaseResponse<String> setCommentLike(@PathVariable("userId") long userId,
+                                               @PathVariable("commentId") long commentId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
+            postService.setCommentLike(userId, commentId);
+
+            String result = "댓글 좋아요 설정 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/{userId}/comments/{commentId}/likes")
+    @ApiOperation(value = "댓글 좋아요 취소")
+    public BaseResponse<String> deleteCommentLike(@PathVariable("userId") long userId,
+                                               @PathVariable("commentId") long commentId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            postService.deleteCommentLike(userId, commentId);
+
+            String result = "댓글 좋아요 취소 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }

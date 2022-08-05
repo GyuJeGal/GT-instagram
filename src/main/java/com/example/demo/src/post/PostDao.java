@@ -95,9 +95,9 @@ public class PostDao {
     }
 
     public void setPostLike(long userId, long postId) {
-        String createUserQuery = "insert into PostLike (userId, postId) VALUES (?,?)";
+        String insertLikeQuery = "insert into PostLike (userId, postId) VALUES (?,?)";
         Object[] params = new Object[] {userId, postId};
-        this.jdbcTemplate.update(createUserQuery, params);
+        this.jdbcTemplate.update(insertLikeQuery, params);
     }
 
     public int checkPostExists(long postId) {
@@ -169,5 +169,29 @@ public class PostDao {
         String insertPostCommentQuery = "insert into PostComment (userId, postId, contents) VALUES (?,?,?)";
         Object[] params = new Object[] {userId, postId, contents};
         this.jdbcTemplate.update(insertPostCommentQuery, params);
+    }
+
+    public int checkCommentExists(long commentId) {
+        String checkCommentQuery = "select exists (select postCommentId from PostComment where postCommentId = ? and status = 1)";
+        return this.jdbcTemplate.queryForObject(checkCommentQuery, int.class, commentId);
+    }
+
+    public int checkCommentLike(long userId, long commentId) {
+        String checkCommentLikeQuery = "select exists (select postCommentLikeId from PostCommentLike where userId = ? and postCommentId = ? and status = 1)";
+        Object[] params = new Object[] {userId, commentId};
+        return this.jdbcTemplate.queryForObject(checkCommentLikeQuery, int.class, params);
+    }
+
+    public void setCommentLike(long userId, long commentId) {
+        String insertLikeQuery = "insert into PostCommentLike (userId, postCommentId) VALUES (?,?)";
+        Object[] params = new Object[] {userId, commentId};
+        this.jdbcTemplate.update(insertLikeQuery, params);
+    }
+
+    public void deleteCommentLike(long userId, long commentId) {
+        String updateQuery = "update PostCommentLike set status = 0 where userId = ? and postCommentId = ?";
+        Object[] params = new Object[] {userId, commentId};
+
+        this.jdbcTemplate.update(updateQuery, params);
     }
 }

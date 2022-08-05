@@ -152,4 +152,48 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void setCommentLike(long userId, long commentId) throws BaseException {
+        try {
+            // 댓글이 존재하지 않는 경우
+            if(postDao.checkCommentExists(commentId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_COMMENT);
+            }
+
+            // 이미 좋아요 상태인 경우
+            if(postDao.checkCommentLike(userId, commentId) == 1) {
+                throw new BaseException(ALREADY_COMMENT_LIKE);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.setCommentLike(userId, commentId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void deleteCommentLike(long userId, long commentId) throws BaseException {
+        try {
+            // 댓글이 존재하지 않는 경우
+            if(postDao.checkCommentExists(commentId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_COMMENT);
+            }
+
+            // 이미 좋아요 취소 상태인 경우
+            if(postDao.checkCommentLike(userId, commentId) == 0) {
+                throw new BaseException(ALREADY_COMMENT_UNLIKE);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.deleteCommentLike(userId, commentId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

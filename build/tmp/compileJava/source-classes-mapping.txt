@@ -62,14 +62,16 @@ com/example/demo/src/post/model/CreatePostReq.java
  com.example.demo.src.post.model.CreatePostReq
 com/example/demo/src/post/model/GetPostCommentsRes.java
  com.example.demo.src.post.model.GetPostCommentsRes
+com/example/demo/src/post/model/PostComment.java
+ com.example.demo.src.post.model.PostComment
+com/example/demo/src/post/model/SetPostCommentReq.java
+ com.example.demo.src.post.model.SetPostCommentReq
 com/example/demo/src/post/PostService.java
  com.example.demo.src.post.PostService
 com/example/demo/src/post/PostController.java
  com.example.demo.src.post.PostController
 com/example/demo/src/user/UserService.java
  com.example.demo.src.user.UserService
-com/example/demo/src/post/model/SetPostCommentReq.java
- com.example.demo.src.post.model.SetPostCommentReq
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/config/BaseException.java
@@ -82,5 +84,3 @@ com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
-com/example/demo/src/post/model/PostComment.java
- com.example.demo.src.post.model.PostComment
