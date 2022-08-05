@@ -116,8 +116,10 @@ public enum BaseResponseStatus {
     FAILED_TO_REJECT_FOLLOW(false,3110,"잘못된 팔로우 요청 취소입니다."),
 
     STILL_ENABLE_PRIVACY(false,3120,"이전의 개인정보 처리 방침 동의가 아직 유효합니다."),
+    
+    NEED_USER_PRIVACY(false,3130,"개인정보 처리 방침 동의가 필요합니다."),
 
-    FAILED_TO_SEARCH_USER(false,3130,"해당 사용자를 찾을 수 없습니다."),
+    FAILED_TO_SEARCH_USER(false,3140,"해당 사용자를 찾을 수 없습니다."),
 
 
 

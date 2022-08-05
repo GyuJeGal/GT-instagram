@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.INVALID_PAGE_INDEX;
 import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @RestController
@@ -30,17 +33,43 @@ public class PostController {
         this.jwtService = jwtService;
     }
 
+    @ResponseBody
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "홈 피드 조회")
+    public BaseResponse<List<GetPostRes>> getPosts(@PathVariable("userId") long userId,
+                                                   @RequestParam("pageIndex") int pageIndex) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(pageIndex <= 0) {
+                return new BaseResponse<>(INVALID_PAGE_INDEX);
+            }
+
+            List<GetPostRes> getPostResList = postService.getPosts(userId, pageIndex);
+
+            return new BaseResponse<>(getPostResList);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 //    @ResponseBody
-//    @GetMapping("/{userId}")
-//    @ApiOperation(value = "홈 피드 조회")
-//    public BaseResponse<GetPostRes> getPosts(@PathVariable("userId") long userId) {
+//    @PostMapping("/{userId}")
+//    @ApiOperation(value = "게시글 등록(작성)")
+//    public BaseResponse<String> getPosts(@PathVariable("userId") long userId) {
 //        try {
 //            long userIdByJwt = jwtService.getUserIdx();
 //            if (userIdByJwt != userId) {
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
 //
-//            return new BaseResponse<>();
+//
+//            String result = "게시글 작성 완료!";
+//            return new BaseResponse<>(result);
 //
 //        } catch (BaseException exception) {
 //            return new BaseResponse<>(exception.getStatus());
