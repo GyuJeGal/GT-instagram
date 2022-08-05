@@ -126,6 +126,9 @@ public enum BaseResponseStatus {
 
     FAILED_TO_SEARCH_USER(false,3140,"해당 사용자를 찾을 수 없습니다."),
 
+    FAILED_TO_SEARCH_POST(false,3150,"게시글을 찾을 수 없습니다."),
+    ALREADY_POST_LIKE(false,3160,"이미 좋아요 상태입니다."),
+    ALREADY_POST_UNLIKE(false,3165,"이미 좋아요 취소 상태입니다."),
 
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),

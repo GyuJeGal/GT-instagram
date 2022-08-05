@@ -87,6 +87,44 @@ public class PostController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/{userId}/{postId}/likes")
+    @ApiOperation(value = "게시글 좋아요 설정")
+    public BaseResponse<String> setPostLike(@PathVariable("userId") long userId, @PathVariable("postId") long postId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
 
+            postService.setPostLike(userId, postId);
+
+            String result = "게시글 좋아요 설정 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PatchMapping("/{userId}/{postId}/likes")
+    @ApiOperation(value = "게시글 좋아요 취소")
+    public BaseResponse<String> deletePostLike(@PathVariable("userId") long userId, @PathVariable("postId") long postId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            postService.deletePostLike(userId, postId);
+
+            String result = "게시글 좋아요 취소 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }

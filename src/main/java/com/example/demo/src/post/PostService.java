@@ -63,4 +63,48 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void setPostLike(long userId, long postId) throws BaseException {
+        try {
+            // 게시글이 존재하지 않는 경우
+            if(postDao.checkPostExists(postId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_POST);
+            }
+            
+            // 이미 좋아요 상태인 경우
+            if(postDao.checkPostLike(userId, postId) == 1) {
+                throw new BaseException(ALREADY_POST_LIKE);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.setPostLike(userId, postId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void deletePostLike(long userId, long postId) throws BaseException {
+        try {
+            // 게시글이 존재하지 않는 경우
+            if(postDao.checkPostExists(postId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_POST);
+            }
+
+            // 이미 좋아요 취소 상태인 경우
+            if(postDao.checkPostLike(userId, postId) == 0) {
+                throw new BaseException(ALREADY_POST_UNLIKE);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.deletePostLike(userId, postId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

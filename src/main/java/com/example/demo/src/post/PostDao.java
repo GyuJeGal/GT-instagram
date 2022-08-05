@@ -85,4 +85,28 @@ public class PostDao {
             this.jdbcTemplate.update(insertQuery2, params2);
         }
     }
+
+    public int checkPostLike(long userId, long postId) {
+        String checkPostLikeQuery = "select exists (select postLikeId from PostLike where userId = ? and postId = ? and status = 1)";
+        Object[] params = new Object[] {userId, postId};
+        return this.jdbcTemplate.queryForObject(checkPostLikeQuery, int.class, params);
+    }
+
+    public void setPostLike(long userId, long postId) {
+        String createUserQuery = "insert into PostLike (userId, postId) VALUES (?,?)";
+        Object[] params = new Object[] {userId, postId};
+        this.jdbcTemplate.update(createUserQuery, params);
+    }
+
+    public int checkPostExists(long postId) {
+        String checkPostLikeQuery = "select exists (select postId from Post where postId = ? and status = 1)";
+        return this.jdbcTemplate.queryForObject(checkPostLikeQuery, int.class, postId);
+    }
+
+    public void deletePostLike(long userId, long postId) {
+        String updateQuery = "update PostLike set status = 0 where userId = ? and postId = ?";
+        Object[] params = new Object[] {userId, postId};
+
+        this.jdbcTemplate.update(updateQuery, params);
+    }
 }
