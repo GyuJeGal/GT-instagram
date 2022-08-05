@@ -57,24 +57,24 @@ public class PostController {
         }
     }
 
-//    @ResponseBody
-//    @PostMapping("/{userId}")
-//    @ApiOperation(value = "게시글 등록(작성)")
-//    public BaseResponse<String> getPosts(@PathVariable("userId") long userId) {
-//        try {
-//            long userIdByJwt = jwtService.getUserIdx();
-//            if (userIdByJwt != userId) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//
-//
-//            String result = "게시글 작성 완료!";
-//            return new BaseResponse<>(result);
-//
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
+    @ResponseBody
+    @PostMapping("/{userId}")
+    @ApiOperation(value = "게시글 등록(작성)")
+    public BaseResponse<String> createPost(@PathVariable("userId") long userId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+
+            String result = "게시글 작성 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 
 

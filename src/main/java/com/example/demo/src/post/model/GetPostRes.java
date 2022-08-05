@@ -13,7 +13,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetPostRes {
-    public GetPostRes(long userId, String nickName, String profileImg, long postId, boolean postLike, int countLike, String contents) {
+    public GetPostRes(long userId, String nickName, String profileImg, long postId, boolean postLike,
+                      int countLike, String contents, int countComment, String createAt) {
         this.userId = userId;
         this.nickName = nickName;
         this.profileImg = profileImg;
@@ -21,6 +22,8 @@ public class GetPostRes {
         this.postLike = postLike;
         this.countLike = countLike;
         this.contents = contents;
+        this.countComment = countComment;
+        this.createAt = createAt;
     }
 
     @ApiModelProperty(value = "사용자 ID", required = true)
@@ -47,4 +50,9 @@ public class GetPostRes {
     @ApiModelProperty(value = "게시글 내용", required = true)
     private String contents;
 
+    @ApiModelProperty(value = "댓글 개수", required = true)
+    private int countComment;
+
+    @ApiModelProperty(value = "작성 시간", required = true)
+    private String createAt;
 }
