@@ -270,4 +270,25 @@ public class PostController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/{userId}/comments/{commentId}/status")
+    @ApiOperation(value = "댓글 삭제")
+    public BaseResponse<String> deleteComment(@PathVariable("userId") long userId,
+                                              @PathVariable("commentId") long commentId) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            postService.deleteComment(userId, commentId);
+
+            String result = "댓글 삭제 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }

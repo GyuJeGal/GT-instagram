@@ -141,6 +141,8 @@ public enum BaseResponseStatus {
     FAILED_TO_UPDATE_POST(false,3190,"게시글 수정에 실패하였습니다."),
     FAILED_TO_DELETE_POST(false,3200,"게시글 삭제에 실패하였습니다."),
 
+    FAILED_TO_DELETE_COMMENT(false,3200,"댓글 삭제에 실패하였습니다."),
+
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),
 
 

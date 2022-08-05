@@ -147,7 +147,7 @@ public class PostDao {
                 "from PostComment PC\n" +
                 "inner join User U using(userId)\n" +
                 "left outer join (select postCommentId, status as commentLike from PostCommentLike where userId = ? and status = 1) PCL using(postCommentId)\n" +
-                "where postId = ? limit 0, ?";
+                "where postId = ? and PC.status = 1 limit 0, ?";
 
         int size = 10 * pageIndex;
         Object[] params = new Object[] {userId, postId, size};
@@ -209,8 +209,16 @@ public class PostDao {
 
     public void deletePost(long postId) {
         String updateQuery = "update Post set status = -1 where postId = ?";
-        Object[] params = new Object[] {postId};
+        this.jdbcTemplate.update(updateQuery, postId);
+    }
 
-        this.jdbcTemplate.update(updateQuery, params);
+    public long getUserByComment(long commentId) {
+        String getUserByPostQuery = "select userId from PostComment where postCommentId = ?";
+        return this.jdbcTemplate.queryForObject(getUserByPostQuery, long.class, commentId);
+    }
+
+    public void deleteComment(long commentId) {
+        String updateQuery = "update PostComment set status = -1 where postCommentId = ?";
+        this.jdbcTemplate.update(updateQuery, commentId);
     }
 }

@@ -240,4 +240,26 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void deleteComment(long userId, long commentId) throws BaseException {
+        try {
+            // 댓글이 존재하지 않는 경우
+            if(postDao.checkCommentExists(commentId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_COMMENT);
+            }
+
+            // 본인 댓글이 아닌 경우
+            if(postDao.getUserByComment(commentId) != userId) {
+                throw new BaseException(FAILED_TO_DELETE_COMMENT);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.deleteComment(commentId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
