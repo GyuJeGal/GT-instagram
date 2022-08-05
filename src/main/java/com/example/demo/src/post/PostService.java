@@ -134,4 +134,22 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void setPostComment(long userId, long postId, String contents) throws BaseException {
+        try {
+            // 게시글이 존재하지 않는 경우
+            if(postDao.checkPostExists(postId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_POST);
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.setPostComment(userId, postId, contents);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

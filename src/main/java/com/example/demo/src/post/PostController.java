@@ -5,6 +5,7 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.post.model.CreatePostReq;
 import com.example.demo.src.post.model.GetPostCommentsRes;
 import com.example.demo.src.post.model.GetPostRes;
+import com.example.demo.src.post.model.SetPostCommentReq;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserPage;
 import com.example.demo.utils.JwtService;
@@ -152,5 +153,33 @@ public class PostController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ResponseBody
+    @PostMapping("/{userId}/{postId}/comments")
+    @ApiOperation(value = "게시글 댓글 작성")
+    public BaseResponse<String> setPostComment(@PathVariable("userId") long userId,
+                                                @PathVariable("postId") long postId,
+                                                @RequestBody SetPostCommentReq setPostCommentReq) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(setPostCommentReq.getContents().length() == 0) {
+                return new BaseResponse<>(POST_POSTS_EMPTY_COMMENT);
+            }
+
+            postService.setPostComment(userId, postId, setPostCommentReq.getContents());
+
+            String result = "댓글 작성 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 
 }

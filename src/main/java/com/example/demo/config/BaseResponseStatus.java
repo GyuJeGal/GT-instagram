@@ -83,6 +83,9 @@ public enum BaseResponseStatus {
     POST_POSTS_EMPTY_IMG_LIST(false,2171,"사진 리스트가 필요합니다."),
     POST_POSTS_OVERSIZE_IMG_LIST(false,2172,"사진은 최대 10장입니다."),
 
+    //[POST] /posts/{userId}/{postId}/comments
+    POST_POSTS_EMPTY_COMMENT(false,2180,"댓글 내용을 입력해주세요."),
+
     // 페이징 관련 요청 오류
     EMPTY_PAGE_INDEX(false,2200,"페이지 인덱스 값이 필요합니다."),
     INVALID_PAGE_INDEX(false,2201,"잘못된 페이지 인덱스입니다."),

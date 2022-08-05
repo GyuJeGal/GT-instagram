@@ -16,6 +16,9 @@ public class PostComment {
     @ApiModelProperty(value = "사용자 ID", required = true)
     private long userId;
 
+    @ApiModelProperty(value = "댓글 ID", required = true)
+    private long commentId;
+
     @ApiModelProperty(value = "사용자 이름", required = true)
     private String nickName;
 

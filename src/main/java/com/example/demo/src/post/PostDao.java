@@ -137,7 +137,7 @@ public class PostDao {
                 rs.getString("contents"),
                 rs.getString("createAt")), postId);
 
-        String getPostCommentsListQuery = "select PC.userId, U.nickName, U.profileImg, PC.contents,\n" +
+        String getPostCommentsListQuery = "select PC.userId, PC.postCommentId, U.nickName, U.profileImg, PC.contents,\n" +
                 "       case\n" +
                 "           when TIMESTAMPDIFF(DAY, PC.createAt, CURRENT_TIMESTAMP) >= 30 then DATE_FORMAT(PC.createAt, '%c월 %e일')\n" +
                 "           when TIMESTAMPDIFF(DAY, PC.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(DAY, PC.createAt, CURRENT_TIMESTAMP), '일')\n" +
@@ -154,6 +154,7 @@ public class PostDao {
 
         List<PostComment> postCommentList = this.jdbcTemplate.query(getPostCommentsListQuery, (rs, rowNum) -> new PostComment(
                 rs.getLong("userId"),
+                rs.getLong("postCommentId"),
                 rs.getString("nickName"),
                 rs.getString("profileImg"),
                 rs.getString("contents"),
@@ -162,5 +163,11 @@ public class PostDao {
 
         getPostCommentsRes.setPostCommentList(postCommentList);
         return getPostCommentsRes;
+    }
+
+    public void setPostComment(long userId, long postId, String contents) {
+        String insertPostCommentQuery = "insert into PostComment (userId, postId, contents) VALUES (?,?,?)";
+        Object[] params = new Object[] {userId, postId, contents};
+        this.jdbcTemplate.update(insertPostCommentQuery, params);
     }
 }
