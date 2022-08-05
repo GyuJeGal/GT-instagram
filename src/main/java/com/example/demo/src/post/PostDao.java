@@ -1,7 +1,9 @@
 package com.example.demo.src.post;
 
 import com.example.demo.src.post.model.CreatePostReq;
+import com.example.demo.src.post.model.GetPostCommentsRes;
 import com.example.demo.src.post.model.GetPostRes;
+import com.example.demo.src.post.model.PostComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -108,5 +110,57 @@ public class PostDao {
         Object[] params = new Object[] {userId, postId};
 
         this.jdbcTemplate.update(updateQuery, params);
+    }
+
+    public int countPostComments(long postId) {
+        String countCommentsQuery = "select count(postCommentId) from PostComment where postId = ?";
+        return this.jdbcTemplate.queryForObject(countCommentsQuery, int.class, postId);
+    }
+
+
+    public GetPostCommentsRes getPostComments(long userId, long postId, int pageIndex) {
+        String getPostContentsQuery = "select P.userId, U.nickName, U.profileImg, P.contents,\n" +
+                "       case\n" +
+                "           when TIMESTAMPDIFF(DAY, P.createAt, CURRENT_TIMESTAMP) >= 30 then DATE_FORMAT(P.createAt, '%c월 %e일')\n" +
+                "           when TIMESTAMPDIFF(DAY, P.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(DAY, P.createAt, CURRENT_TIMESTAMP), '일')\n" +
+                "           when TIMESTAMPDIFF(HOUR , P.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(Hour, P.createAt, CURRENT_TIMESTAMP), '시간')\n" +
+                "           when TIMESTAMPDIFF(MINUTE, P.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(MINUTE, P.createAt, CURRENT_TIMESTAMP), '분')\n" +
+                "           else concat(TIMESTAMPDIFF(SECOND, P.createAt, CURRENT_TIMESTAMP), '초') end as createAt\n" +
+                "from Post P\n" +
+                "inner join User U using(userId)\n" +
+                "where postId = ?";
+
+        GetPostCommentsRes getPostCommentsRes = this.jdbcTemplate.queryForObject(getPostContentsQuery, (rs, rowNum) -> new GetPostCommentsRes(
+                rs.getLong("userId"),
+                rs.getString("nickName"),
+                rs.getString("profileImg"),
+                rs.getString("contents"),
+                rs.getString("createAt")), postId);
+
+        String getPostCommentsListQuery = "select PC.userId, U.nickName, U.profileImg, PC.contents,\n" +
+                "       case\n" +
+                "           when TIMESTAMPDIFF(DAY, PC.createAt, CURRENT_TIMESTAMP) >= 30 then DATE_FORMAT(PC.createAt, '%c월 %e일')\n" +
+                "           when TIMESTAMPDIFF(DAY, PC.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(DAY, PC.createAt, CURRENT_TIMESTAMP), '일')\n" +
+                "           when TIMESTAMPDIFF(HOUR , PC.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(Hour, PC.createAt, CURRENT_TIMESTAMP), '시간')\n" +
+                "           when TIMESTAMPDIFF(MINUTE, PC.createAt, CURRENT_TIMESTAMP) >= 1 then concat(TIMESTAMPDIFF(MINUTE, PC.createAt, CURRENT_TIMESTAMP), '분')\n" +
+                "           else concat(TIMESTAMPDIFF(SECOND, PC.createAt, CURRENT_TIMESTAMP), '초') end as createAt, if(PCL.commentLike=1, true, false) as commentLike\n" +
+                "from PostComment PC\n" +
+                "inner join User U using(userId)\n" +
+                "left outer join (select postCommentId, status as commentLike from PostCommentLike where userId = ? and status = 1) PCL using(postCommentId)\n" +
+                "where postId = ? limit 0, ?";
+
+        int size = 10 * pageIndex;
+        Object[] params = new Object[] {userId, postId, size};
+
+        List<PostComment> postCommentList = this.jdbcTemplate.query(getPostCommentsListQuery, (rs, rowNum) -> new PostComment(
+                rs.getLong("userId"),
+                rs.getString("nickName"),
+                rs.getString("profileImg"),
+                rs.getString("contents"),
+                rs.getString("createAt"),
+                rs.getBoolean("commentLike")), params);
+
+        getPostCommentsRes.setPostCommentList(postCommentList);
+        return getPostCommentsRes;
     }
 }

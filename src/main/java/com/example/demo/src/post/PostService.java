@@ -2,6 +2,7 @@ package com.example.demo.src.post;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.post.model.CreatePostReq;
+import com.example.demo.src.post.model.GetPostCommentsRes;
 import com.example.demo.src.post.model.GetPostRes;
 import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
@@ -41,6 +42,7 @@ public class PostService {
             int countUserPosts = postDao.countGetPosts(userId);
             int maxIndex = countUserPosts/10 + 1;
 
+            // 최대 인덱스를 초과했을때
             if(pageIndex > maxIndex) {
                 throw new BaseException(INVALID_PAGE_INDEX);
             }
@@ -103,6 +105,31 @@ public class PostService {
 
         try {
             postDao.deletePostLike(userId, postId);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public GetPostCommentsRes getPostComments(long userId, long postId, int pageIndex) throws BaseException {
+        try {
+            // 게시글이 존재하지 않는 경우
+            if(postDao.checkPostExists(postId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_POST);
+            }
+            int countPostComments = postDao.countPostComments(postId);
+            int maxIndex = countPostComments/10 + 1;
+
+            // 최대 인덱스를 초과했을때
+            if(pageIndex > maxIndex) {
+                throw new BaseException(INVALID_PAGE_INDEX);
+            }
+
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            return postDao.getPostComments(userId, postId, pageIndex);
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

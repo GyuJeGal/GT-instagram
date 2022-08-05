@@ -3,6 +3,7 @@ package com.example.demo.src.post;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.post.model.CreatePostReq;
+import com.example.demo.src.post.model.GetPostCommentsRes;
 import com.example.demo.src.post.model.GetPostRes;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserPage;
@@ -121,6 +122,31 @@ public class PostController {
 
             String result = "게시글 좋아요 취소 완료!";
             return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/{userId}/{postId}/comments")
+    @ApiOperation(value = "게시글 댓글 모두 보기")
+    public BaseResponse<GetPostCommentsRes> getPostComments(@PathVariable("userId") long userId,
+                                                            @PathVariable("postId") long postId,
+                                                            @RequestParam("pageIndex") int pageIndex) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            if(pageIndex <= 0) {
+                return new BaseResponse<>(INVALID_PAGE_INDEX);
+            }
+
+            GetPostCommentsRes getPostCommentsRes = postService.getPostComments(userId, postId, pageIndex);
+
+            return new BaseResponse<>(getPostCommentsRes);
 
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
