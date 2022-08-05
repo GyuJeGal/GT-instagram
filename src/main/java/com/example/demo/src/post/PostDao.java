@@ -1,5 +1,6 @@
 package com.example.demo.src.post;
 
+import com.example.demo.src.post.model.CreatePostReq;
 import com.example.demo.src.post.model.GetPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,7 +42,7 @@ public class PostDao {
                 "left outer join (select postId, status as postLike from PostLike where userId = ? and status = 1) PL1 using(postId)\n" +
                 "left outer join (select postId, count(postLikeId) as countLike from PostLike group by (postId)) PL2 using(postId)\n" +
                 "left outer join (select postId, count(postCommentId) as countComment from PostComment group by (postId)) PC using(postId)\n" +
-                "where userId in (select followedUserId from Follow where followingUserId = ? and status = 1) order by (postId) desc limit 0,?";
+                "where userId in (select followedUserId from Follow where followingUserId = ? and status = 1) and P.status = 1 order by (postId) desc limit 0,?";
 
         int size = 10 * pageIndex;
         Object[] params = new Object[] {userId, userId, size};
@@ -68,5 +69,20 @@ public class PostDao {
         }
 
         return getPostResList;
+    }
+
+    public void createPost(long userId, CreatePostReq createPostReq) {
+        String insertQuery1 = "insert into Post (userId, contents) VALUES (?,?)";
+        Object[] params1 = new Object[] {userId, createPostReq.getContents()};
+        this.jdbcTemplate.update(insertQuery1, params1);
+
+        String getPostIdQuery = "select last_insert_id()";
+        long postId = this.jdbcTemplate.queryForObject(getPostIdQuery, long.class);
+
+        String insertQuery2 = "insert into PostImg (postId, imgUrl) VALUES (?,?)";
+        for(int i = 0; i < createPostReq.getPostImgList().size(); i++) {
+            Object[] params2 = new Object[] {postId, createPostReq.getPostImgList().get(i)};
+            this.jdbcTemplate.update(insertQuery2, params2);
+        }
     }
 }

@@ -78,6 +78,11 @@ public enum BaseResponseStatus {
     PATCH_USERS_EMPTY_PASSWORD(false,2160,"비밀번호를 입력해주세요."),
     PATCH_USERS_INVALID_PASSWORD(false,2161,"잘못된 비밀번호입니다."),
 
+    //[POST] /posts/{userId}
+    POST_POSTS_OVER_LENGTH_CONTENTS(false,2170,"게시글 내용은 최대 1000자입니다."),
+    POST_POSTS_EMPTY_IMG_LIST(false,2171,"사진 리스트가 필요합니다."),
+    POST_POSTS_OVERSIZE_IMG_LIST(false,2172,"사진은 최대 10장입니다."),
+
     // 페이징 관련 요청 오류
     EMPTY_PAGE_INDEX(false,2200,"페이지 인덱스 값이 필요합니다."),
     INVALID_PAGE_INDEX(false,2201,"잘못된 페이지 인덱스입니다."),

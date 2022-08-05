@@ -1,6 +1,7 @@
 package com.example.demo.src.post;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.post.model.CreatePostReq;
 import com.example.demo.src.post.model.GetPostRes;
 import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;
@@ -53,5 +54,13 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
 
+    }
+
+    public void createPost(long userId, CreatePostReq createPostReq) throws BaseException {
+        try {
+            postDao.createPost(userId, createPostReq);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.example.demo.src.post;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.post.model.CreatePostReq;
 import com.example.demo.src.post.model.GetPostRes;
 import com.example.demo.src.user.UserService;
 import com.example.demo.src.user.model.GetUserPage;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.INVALID_PAGE_INDEX;
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("/posts")
@@ -60,13 +60,24 @@ public class PostController {
     @ResponseBody
     @PostMapping("/{userId}")
     @ApiOperation(value = "게시글 등록(작성)")
-    public BaseResponse<String> createPost(@PathVariable("userId") long userId) {
+    public BaseResponse<String> createPost(@PathVariable("userId") long userId, @RequestBody CreatePostReq createPostReq) {
+        if(createPostReq.getContents().length() > 1000) {
+            return new BaseResponse<>(POST_POSTS_OVER_LENGTH_CONTENTS);
+        }
+        if(createPostReq.getPostImgList() == null) {
+            return new BaseResponse<>(POST_POSTS_EMPTY_IMG_LIST);
+        }
+        if(createPostReq.getPostImgList().size() > 10) {
+            return new BaseResponse<>(POST_POSTS_OVERSIZE_IMG_LIST);
+        }
+
         try {
             long userIdByJwt = jwtService.getUserIdx();
             if (userIdByJwt != userId) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
 
+            postService.createPost(userId, createPostReq);
 
             String result = "게시글 작성 완료!";
             return new BaseResponse<>(result);
