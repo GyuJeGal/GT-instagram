@@ -221,4 +221,16 @@ public class PostDao {
         String updateQuery = "update PostComment set status = -1 where postCommentId = ?";
         this.jdbcTemplate.update(updateQuery, commentId);
     }
+
+    public void reportPost(long userId, long postId, int reportType) {
+        String insertReportQuery = "insert into PostReport (userId, postId, reportType) VALUES (?,?,?)";
+        Object[] params = new Object[] {userId, postId, reportType};
+        this.jdbcTemplate.update(insertReportQuery, params);
+    }
+
+    public void reportPostComment(long userId, long commentId, int reportType) {
+        String insertReportQuery = "insert into PostCommentReport (userId, postCommentId, reportType) VALUES (?,?,?)";
+        Object[] params = new Object[] {userId, commentId, reportType};
+        this.jdbcTemplate.update(insertReportQuery, params);
+    }
 }

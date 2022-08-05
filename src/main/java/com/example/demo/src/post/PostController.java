@@ -291,4 +291,62 @@ public class PostController {
         }
     }
 
+    @ResponseBody
+    @PostMapping("/{userId}/{postId}")
+    @ApiOperation(value = "게시글 신고")
+    public BaseResponse<String> reportPost(@PathVariable("userId") long userId,
+                                           @PathVariable("postId") long postId,
+                                           @RequestParam("reportType") int reportType) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            // reportType 값
+            // 1:스팸, 2:나체 이미지 또는 성적 행위, 3:마음에 들지 않습니다, 4:사기 또는 거짓, 5:혐오 발언 또는 상징
+            // 6:거짓 정보, 7:따돌림 또는 괴롭힘, 8:폭력 또는 위험한 단체, 9:지식재산권 침해
+            if(reportType <= 0 || reportType > 9) {
+                return new BaseResponse<>(INVALID_REPORT_TYPE);
+            }
+
+            postService.reportPost(userId, postId, reportType);
+
+            String result = "게시글 신고 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/{userId}/comments/{commentId}")
+    @ApiOperation(value = "댓글 신고")
+    public BaseResponse<String> reportPostComment(@PathVariable("userId") long userId,
+                                           @PathVariable("commentId") long commentId,
+                                           @RequestParam("reportType") int reportType) {
+        try {
+            long userIdByJwt = jwtService.getUserIdx();
+            if (userIdByJwt != userId) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+
+            // reportType 값
+            // 1:스팸, 2:나체 이미지 또는 성적 행위, 3:혐오 발언 또는 상징, 4:폭력 또는 위험한 단체, 5:불법 또는 규제 상품 판매
+            // 6:따돌림 또는 괴롭힘, 7:지식재산권 침해, 8:거짓 정보, 9:자살, 자해 및 섭식 장애
+            if(reportType <= 0 || reportType > 9) {
+                return new BaseResponse<>(INVALID_REPORT_TYPE);
+            }
+
+            postService.reportPostComment(userId, commentId, reportType);
+
+            String result = "댓글 신고 완료!";
+            return new BaseResponse<>(result);
+
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }

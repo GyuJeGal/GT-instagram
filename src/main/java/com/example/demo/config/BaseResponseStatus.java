@@ -86,6 +86,10 @@ public enum BaseResponseStatus {
     //[POST] /posts/{userId}/{postId}/comments
     POST_POSTS_EMPTY_COMMENT(false,2180,"댓글 내용을 입력해주세요."),
     POST_POSTS_OVER_LENGTH_COMMENT(false,2185,"댓글은 최대 200자 입력해주세요."),
+    
+    // 신고 관련 요청 오류
+    INVALID_REPORT_TYPE(false,2190,"잘못된 신고 형식입니다."),
+    
 
     // 페이징 관련 요청 오류
     EMPTY_PAGE_INDEX(false,2200,"페이지 인덱스 값이 필요합니다."),
@@ -142,6 +146,9 @@ public enum BaseResponseStatus {
     FAILED_TO_DELETE_POST(false,3200,"게시글 삭제에 실패하였습니다."),
 
     FAILED_TO_DELETE_COMMENT(false,3200,"댓글 삭제에 실패하였습니다."),
+    
+    FAILED_TO_REPORT_POST(false,3210,"게시글 신고에 실패하였습니다."),
+    FAILED_TO_REPORT_COMMENT(false,3220,"댓글 신고에 실패하였습니다."),
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),
 

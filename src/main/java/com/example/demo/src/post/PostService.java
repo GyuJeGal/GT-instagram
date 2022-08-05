@@ -262,4 +262,48 @@ public class PostService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void reportPost(long userId, long postId, int reportType) throws BaseException {
+        try {
+            // 게시글이 존재하지 않는 경우
+            if(postDao.checkPostExists(postId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_POST);
+            }
+
+            // 본인 게시글인 경우
+            if(postDao.getUserByPost(postId) == userId) {
+                throw new BaseException(FAILED_TO_REPORT_POST);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.reportPost(userId, postId, reportType);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void reportPostComment(long userId, long commentId, int reportType) throws BaseException {
+        try {
+            // 댓글이 존재하지 않는 경우
+            if(postDao.checkCommentExists(commentId) == 0) {
+                throw new BaseException(FAILED_TO_SEARCH_COMMENT);
+            }
+
+            // 본인 댓글인 경우
+            if(postDao.getUserByComment(commentId) == userId) {
+                throw new BaseException(FAILED_TO_REPORT_COMMENT);
+            }
+        } catch (Exception exception) {
+            throw exception;
+        }
+
+        try {
+            postDao.reportPostComment(userId, commentId, reportType);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
