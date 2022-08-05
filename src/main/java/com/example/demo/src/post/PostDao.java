@@ -206,4 +206,11 @@ public class PostDao {
 
         this.jdbcTemplate.update(updateQuery, params);
     }
+
+    public void deletePost(long postId) {
+        String updateQuery = "update Post set status = -1 where postId = ?";
+        Object[] params = new Object[] {postId};
+
+        this.jdbcTemplate.update(updateQuery, params);
+    }
 }

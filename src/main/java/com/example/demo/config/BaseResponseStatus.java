@@ -139,6 +139,7 @@ public enum BaseResponseStatus {
     ALREADY_COMMENT_UNLIKE(false,3185,"이미 댓글 좋아요 취소 상태입니다."),
 
     FAILED_TO_UPDATE_POST(false,3190,"게시글 수정에 실패하였습니다."),
+    FAILED_TO_DELETE_POST(false,3200,"게시글 삭제에 실패하였습니다."),
 
     INVALID_KAKAO_USER(false,3500,"잘못된 카카오 로그인입니다."),
 
