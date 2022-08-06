@@ -233,4 +233,24 @@ public class PostDao {
         Object[] params = new Object[] {userId, commentId, reportType};
         this.jdbcTemplate.update(insertReportQuery, params);
     }
+
+    public int countPostReports(long postId) {
+        String countPostReportsQuery = "select count(postReportId) from PostReport where postId = ?";
+        return this.jdbcTemplate.queryForObject(countPostReportsQuery, int.class, postId);
+    }
+
+    public void setPostInvisible(long postId) {
+        String updateQuery = "update Post set status = 0 where postId = ?";
+        this.jdbcTemplate.update(updateQuery, postId);
+    }
+
+    public int countPostCommentReports(long commentId) {
+        String countPostCommentReportsQuery = "select count(commentReportId) from PostCommentReport where postCommentId = ?";
+        return this.jdbcTemplate.queryForObject(countPostCommentReportsQuery, int.class, commentId);
+    }
+
+    public void setPostCommentInvisible(long commentId) {
+        String updateQuery = "update PostComment set status = 0 where postCommentId = ?";
+        this.jdbcTemplate.update(updateQuery, commentId);
+    }
 }

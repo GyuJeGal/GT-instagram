@@ -26,8 +26,8 @@ com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
 com/example/demo/src/Criteria.java
  com.example.demo.src.Criteria
-com/example/demo/config/SwaggerConfig.java
- com.example.demo.config.SwaggerConfig
+com/example/demo/src/post/PostDao.java
+ com.example.demo.src.post.PostDao
 com/example/demo/src/user/model/PatchUserReq.java
  com.example.demo.src.user.model.PatchUserReq
 com/example/demo/src/WebSecurityConfig.java
@@ -68,6 +68,8 @@ com/example/demo/src/post/model/SetPostCommentReq.java
  com.example.demo.src.post.model.SetPostCommentReq
 com/example/demo/src/post/model/PostContents.java
  com.example.demo.src.post.model.PostContents
+com/example/demo/config/SwaggerConfig.java
+ com.example.demo.config.SwaggerConfig
 com/example/demo/src/post/PostService.java
  com.example.demo.src.post.PostService
 com/example/demo/src/post/PostController.java
@@ -78,8 +80,6 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
-com/example/demo/src/post/PostDao.java
- com.example.demo.src.post.PostDao
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/user/UserController.java

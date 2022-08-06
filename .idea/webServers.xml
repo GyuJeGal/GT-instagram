@@ -9,6 +9,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="fd0b9f19-d2fa-4d6d-8af6-d8b2b9f8c984" name="instagram" url="http://prod.sogogi.shop">
+        <fileTransfer rootFolder="/var/www/GT-instagram" accessType="SFTP" host="3.34.225.45" port="22" sshConfigId="714eecdc-0422-4962-8cd9-0e32683df6a9" sshConfig="ubuntu@3.34.225.45:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>

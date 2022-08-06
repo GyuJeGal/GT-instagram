@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 
 /**
@@ -8,9 +10,9 @@ import lombok.Getter;
 @Getter
 public enum BaseResponseStatus {
     /**
-     * 1000 : 요청 성공
+     * 200 : 요청 성공
      */
-    SUCCESS(true, 1000, "요청에 성공하였습니다."),
+    SUCCESS(true, 200, "요청에 성공하였습니다."),
 
 
     /**
@@ -26,11 +28,6 @@ public enum BaseResponseStatus {
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
     // [POST] /users
-    POST_USERS_EMPTY_EMAIL(false, 2020, "이메일을 입력해주세요."),
-    POST_USERS_INVALID_EMAIL(false, 2021, "이메일 형식을 확인해주세요."),
-    POST_USERS_OVER_LENGTH_EMAIL(false, 2022, "이메일 길이를 확인해주세요."),
-
-
     POST_USERS_EMPTY_PHONENUMBER(false,2030,"휴대폰 번호를 입력해주세요."),
     POST_USERS_INVALID_PHONENUMBER(false,2031,"잘못된 휴대폰 번호입니다."),
 

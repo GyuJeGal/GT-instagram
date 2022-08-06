@@ -280,6 +280,11 @@ public class PostService {
 
         try {
             postDao.reportPost(userId, postId, reportType);
+
+            // 게시글 신고 횟수가 5번 이상일 때 게시글 invisible 처리
+            if(postDao.countPostReports(postId) >= 5) {
+                postDao.setPostInvisible(postId);
+            }
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -302,6 +307,11 @@ public class PostService {
 
         try {
             postDao.reportPostComment(userId, commentId, reportType);
+
+            // 댓글 신고 횟수가 5번 이상일 때 게시글 invisible 처리
+            if(postDao.countPostCommentReports(commentId) >= 5) {
+                postDao.setPostCommentInvisible(commentId);
+            }
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
