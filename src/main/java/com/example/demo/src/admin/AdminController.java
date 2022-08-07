@@ -67,5 +67,24 @@ public class AdminController {
         }
     }
 
+    @ResponseBody
+    @PatchMapping("/users/{userId}")
+    @ApiOperation(value = "회원 정지 설정")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 4000, message = "데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> setUserBlock(@PathVariable("userId") long userId) {
+
+        try{
+            adminService.setUserBlock(userId);
+
+            String result = "회원 정지 설정 완료!";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 }

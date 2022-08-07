@@ -316,4 +316,9 @@ public class AdminDao {
         return userDetail;
     }
 
+    public void setUserBlock(long userId) {
+        String updateQuery = "update User set status = 2 where userId = ?";
+
+        this.jdbcTemplate.update(updateQuery, userId);
+    }
 }

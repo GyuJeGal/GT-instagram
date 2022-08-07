@@ -42,4 +42,12 @@ public class AdminService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void setUserBlock(long userId) throws BaseException {
+        try {
+            adminDao.setUserBlock(userId);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }
