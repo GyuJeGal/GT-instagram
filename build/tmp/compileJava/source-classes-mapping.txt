@@ -92,10 +92,10 @@ com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/admin/model/PostReportInfo.java
  com.example.demo.src.admin.model.PostReportInfo
-com/example/demo/src/admin/AdminService.java
- com.example.demo.src.admin.AdminService
 com/example/demo/src/admin/model/CommentReportInfo.java
  com.example.demo.src.admin.model.CommentReportInfo
+com/example/demo/src/admin/AdminService.java
+ com.example.demo.src.admin.AdminService
 com/example/demo/src/admin/AdminDao.java
  com.example.demo.src.admin.AdminDao
 com/example/demo/src/admin/AdminController.java

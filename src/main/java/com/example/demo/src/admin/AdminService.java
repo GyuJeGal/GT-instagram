@@ -80,4 +80,20 @@ public class AdminService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    public void deletePost(long postId) throws BaseException {
+        try {
+            adminDao.deletePost(postId);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public void deleteComment(long commentId) throws BaseException {
+        try {
+            adminDao.deleteComment(commentId);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

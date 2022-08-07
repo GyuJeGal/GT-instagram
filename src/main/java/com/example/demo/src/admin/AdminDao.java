@@ -383,4 +383,16 @@ public class AdminDao {
 
         this.jdbcTemplate.update(deleteQuery, reportId);
     }
+
+    public void deletePost(long postId) {
+        String updateQuery = "update Post set status = -1 where postId = ?";
+
+        this.jdbcTemplate.update(updateQuery, postId);
+    }
+
+    public void deleteComment(long commentId) {
+        String updateQuery = "update PostComment set status = -1 where postCommentId = ?";
+
+        this.jdbcTemplate.update(updateQuery, commentId);
+    }
 }
