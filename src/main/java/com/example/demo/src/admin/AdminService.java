@@ -1,6 +1,7 @@
 package com.example.demo.src.admin;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.admin.model.UserDetail;
 import com.example.demo.src.admin.model.UserInfoReq;
 import com.example.demo.src.admin.model.UserInfoRes;
 import com.example.demo.src.user.UserDao;
@@ -29,6 +30,14 @@ public class AdminService {
     public List<UserInfoRes> getUsers(UserInfoReq userInfoReq) throws BaseException {
         try {
             return adminDao.getUsers(userInfoReq);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public UserDetail getUserDetail(long userId) throws BaseException {
+        try {
+            return adminDao.getUserDetail(userId);
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

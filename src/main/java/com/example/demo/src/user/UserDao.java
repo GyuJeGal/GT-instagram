@@ -201,7 +201,7 @@ public class UserDao {
     }
 
     public int checkUser(String loginId) {
-        String checkUserQuery = "select exists (select userId from User where nickName = ?)";
+        String checkUserQuery = "select exists (select userId from User where nickName = ? and status = 1)";
         return this.jdbcTemplate.queryForObject(checkUserQuery, int.class, loginId);
     }
 
@@ -374,5 +374,11 @@ public class UserDao {
         Object[] updateParams = new Object[] {password, userId};
 
         this.jdbcTemplate.update(updateQuery, updateParams);
+    }
+
+    public void setLoginAt(long userId) {
+        String updateQuery = "update User set loginAt = NOW() where userId = ?";
+
+        this.jdbcTemplate.update(updateQuery, userId);
     }
 }

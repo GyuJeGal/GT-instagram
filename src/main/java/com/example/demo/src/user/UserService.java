@@ -307,7 +307,7 @@ public class UserService {
 
 
     public PostLoginRes login(PostLoginReq postLoginReq) throws BaseException {
-        // 아이디 존재하는지 체크
+        // 아이디 존재하는지 체크(활성화 상태인 사용자만 로그인 가능)
         if(userDao.checkUser(postLoginReq.getLoginId()) == 0) {
             throw new BaseException(FAILED_TO_LOGIN);
         }
@@ -326,6 +326,8 @@ public class UserService {
         if(user.getPassword().equals(encryptedPassword)) {
             long userId = user.getUserId();
             String jwt = jwtService.createJwt(userId);
+            userDao.setLoginAt(userId);
+
             return new PostLoginRes(jwt, userId);
         }
         //비밀 번호가 일치하지 않을 때
@@ -349,6 +351,7 @@ public class UserService {
             // 회원인 경우
             else {
                 String jwt = jwtService.createJwt(userId);
+                userDao.setLoginAt(userId);
                 return new KakaoUserRes(false, jwt, userId);
             }
 

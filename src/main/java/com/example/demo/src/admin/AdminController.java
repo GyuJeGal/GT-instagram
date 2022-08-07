@@ -2,6 +2,7 @@ package com.example.demo.src.admin;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.admin.model.UserDetail;
 import com.example.demo.src.admin.model.UserInfoReq;
 import com.example.demo.src.admin.model.UserInfoRes;
 import com.example.demo.utils.JwtService;
@@ -44,6 +45,23 @@ public class AdminController {
         try{
             List<UserInfoRes> userInfoList = adminService.getUsers(userInfoReq);
             return new BaseResponse<>(userInfoList);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/users/{userId}")
+    @ApiOperation(value = "관리자 페이지(회원 상세 조회)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 4000, message = "데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<UserDetail> getUserDetail(@PathVariable("userId") long userId) {
+
+        try{
+            UserDetail userDetail = adminService.getUserDetail(userId);
+            return new BaseResponse<>(userDetail);
         } catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
