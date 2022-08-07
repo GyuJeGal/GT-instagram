@@ -24,8 +24,8 @@ com/example/demo/src/user/model/UserName.java
  com.example.demo.src.user.model.UserName
 com/example/demo/src/user/UserDao.java
  com.example.demo.src.user.UserDao
-com/example/demo/src/Criteria.java
- com.example.demo.src.Criteria
+com/example/demo/config/BaseResponse.java
+ com.example.demo.config.BaseResponse
 com/example/demo/src/post/PostDao.java
  com.example.demo.src.post.PostDao
 com/example/demo/src/user/model/PatchUserReq.java
@@ -84,5 +84,13 @@ com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/user/UserController.java
  com.example.demo.src.user.UserController
-com/example/demo/config/BaseResponse.java
- com.example.demo.config.BaseResponse
+com/example/demo/src/admin/model/UserInfoRes.java
+ com.example.demo.src.admin.model.UserInfoRes
+com/example/demo/src/admin/AdminService.java
+ com.example.demo.src.admin.AdminService
+com/example/demo/src/admin/AdminDao.java
+ com.example.demo.src.admin.AdminDao
+com/example/demo/src/admin/model/UserInfoReq.java
+ com.example.demo.src.admin.model.UserInfoReq
+com/example/demo/src/admin/AdminController.java
+ com.example.demo.src.admin.AdminController
