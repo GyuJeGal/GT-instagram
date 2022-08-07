@@ -335,7 +335,8 @@ public class AdminDao {
                 "from PostReport PR\n" +
                 "inner join Post P using(postId)\n" +
                 "inner join User U on P.userId = U.userId\n" +
-                "order by (postId) desc";
+                "where status = 1 " +
+                "order by (postReportId) desc";
 
         return this.jdbcTemplate.query(getPostReportsQuery, (rs, rowNum) -> new PostReportInfo(
                 rs.getLong("postReportId"),
@@ -360,7 +361,8 @@ public class AdminDao {
                 "from PostCommentReport PCR\n" +
                 "inner join PostComment PC using(postCommentId)\n" +
                 "inner join User U on PC.userId = U.userId\n" +
-                "order by (postId) desc";
+                "where status = 1 " +
+                "order by (commentReportId) desc";
 
         return this.jdbcTemplate.query(getPostReportsQuery, (rs, rowNum) -> new CommentReportInfo(
                 rs.getLong("commentReportId"),
@@ -368,5 +370,17 @@ public class AdminDao {
                 rs.getString("nickName"),
                 rs.getString("contents"),
                 rs.getString("createAt")));
+    }
+
+    public void deletePostReport(long reportId) {
+        String deleteQuery = "delete from PostReport where postReportId = ?";
+
+        this.jdbcTemplate.update(deleteQuery, reportId);
+    }
+
+    public void deleteCommentReport(long reportId) {
+        String deleteQuery = "delete from PostCommentReport where commentReportId = ?";
+
+        this.jdbcTemplate.update(deleteQuery, reportId);
     }
 }

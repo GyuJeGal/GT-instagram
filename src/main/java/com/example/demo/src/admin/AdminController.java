@@ -121,5 +121,43 @@ public class AdminController {
         }
     }
 
+    @ResponseBody
+    @DeleteMapping("/post-reports/{reportId}")
+    @ApiOperation(value = "게시글 신고 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 4000, message = "데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> deletePostReport(@PathVariable("reportId") long reportId) {
+
+        try{
+            adminService.deletePostReport(reportId);
+
+            String result = "게시글 신고 삭제 완료!";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @DeleteMapping("/comment-reports/{reportId}")
+    @ApiOperation(value = "댓글 신고 삭제")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 4000, message = "데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<String> deleteCommentReport(@PathVariable("reportId") long reportId) {
+
+        try{
+            adminService.deleteCommentReport(reportId);
+
+            String result = "댓글 신고 삭제 완료!";
+            return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 }
