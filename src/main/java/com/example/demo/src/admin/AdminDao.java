@@ -1,8 +1,6 @@
 package com.example.demo.src.admin;
 
-import com.example.demo.src.admin.model.UserDetail;
-import com.example.demo.src.admin.model.UserInfoReq;
-import com.example.demo.src.admin.model.UserInfoRes;
+import com.example.demo.src.admin.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -320,5 +318,55 @@ public class AdminDao {
         String updateQuery = "update User set status = 2 where userId = ?";
 
         this.jdbcTemplate.update(updateQuery, userId);
+    }
+
+    public List<PostReportInfo> getPostReports() {
+        String getPostReportsQuery = "select PR.postReportId, PR.postId, U.nickName, PR.createAt,\n" +
+                "       case\n" +
+                "           when PR.reportType = 1 then '스팸'\n" +
+                "           when PR.reportType = 2 then'나체 이미지 또는 성적 행위'\n" +
+                "           when PR.reportType = 3 then'마음에 들지 않습니다'\n" +
+                "           when PR.reportType = 4 then'사기 또는 거짓'\n" +
+                "           when PR.reportType = 5 then'혐오 발언 또는 상징'\n" +
+                "           when PR.reportType = 6 then'거짓 정보'\n" +
+                "           when PR.reportType = 7 then'따돌림 또는 괴롭힘'\n" +
+                "           when PR.reportType = 8 then'폭력 또는 위험한 단체'\n" +
+                "           else '지식재산권 침해' end as contents\n" +
+                "from PostReport PR\n" +
+                "inner join Post P using(postId)\n" +
+                "inner join User U on P.userId = U.userId\n" +
+                "order by (postId) desc";
+
+        return this.jdbcTemplate.query(getPostReportsQuery, (rs, rowNum) -> new PostReportInfo(
+                rs.getLong("postReportId"),
+                rs.getLong("postId"),
+                rs.getString("nickName"),
+                rs.getString("contents"),
+                rs.getString("createAt")));
+    }
+
+    public List<CommentReportInfo> getCommentReports() {
+        String getPostReportsQuery = "select PCR.commentReportId, PC.postCommentId, U.nickName, PCR.createAt,\n" +
+                "       case\n" +
+                "           when PCR.reportType = 1 then '스팸'\n" +
+                "           when PCR.reportType = 2 then'나체 이미지 또는 성적 행위'\n" +
+                "           when PCR.reportType = 3 then'혐오 발언 또는 상징'\n" +
+                "           when PCR.reportType = 4 then'폭력 또는 위험한 단체'\n" +
+                "           when PCR.reportType = 5 then'불법 또는 규제 상품 판매'\n" +
+                "           when PCR.reportType = 6 then'따돌림 또는 괴롭힘'\n" +
+                "           when PCR.reportType = 7 then'지식재산권 침해'\n" +
+                "           when PCR.reportType = 8 then'거짓 정보'\n" +
+                "           else '자살, 자해 및 섭식 장애' end as contents\n" +
+                "from PostCommentReport PCR\n" +
+                "inner join PostComment PC using(postCommentId)\n" +
+                "inner join User U on PC.userId = U.userId\n" +
+                "order by (postId) desc";
+
+        return this.jdbcTemplate.query(getPostReportsQuery, (rs, rowNum) -> new CommentReportInfo(
+                rs.getLong("commentReportId"),
+                rs.getLong("postCommentId"),
+                rs.getString("nickName"),
+                rs.getString("contents"),
+                rs.getString("createAt")));
     }
 }

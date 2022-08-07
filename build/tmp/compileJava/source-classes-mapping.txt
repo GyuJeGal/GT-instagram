@@ -12,10 +12,10 @@ com/example/demo/src/user/model/UserName.java
  com.example.demo.src.user.model.UserName
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
-com/example/demo/src/admin/AdminService.java
- com.example.demo.src.admin.AdminService
-com/example/demo/src/admin/AdminDao.java
- com.example.demo.src.admin.AdminDao
+com/example/demo/src/user/model/UpdatePasswordReq.java
+ com.example.demo.src.user.model.UpdatePasswordReq
+com/example/demo/src/user/model/Post.java
+ com.example.demo.src.user.model.Post
 com/example/demo/src/admin/model/UserInfoRes.java
  com.example.demo.src.admin.model.UserInfoRes
 com/example/demo/src/post/PostService.java
@@ -86,13 +86,17 @@ com/example/demo/src/user/model/KakaoAccessToken.java
  com.example.demo.src.user.model.KakaoAccessToken
 com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
-com/example/demo/src/admin/AdminController.java
- com.example.demo.src.admin.AdminController
-com/example/demo/utils/JwtService.java
- com.example.demo.utils.JwtService
 com/example/demo/src/post/model/PostComment.java
  com.example.demo.src.post.model.PostComment
-com/example/demo/src/user/model/Post.java
- com.example.demo.src.user.model.Post
-com/example/demo/src/user/model/UpdatePasswordReq.java
- com.example.demo.src.user.model.UpdatePasswordReq
+com/example/demo/utils/JwtService.java
+ com.example.demo.utils.JwtService
+com/example/demo/src/admin/model/PostReportInfo.java
+ com.example.demo.src.admin.model.PostReportInfo
+com/example/demo/src/admin/AdminService.java
+ com.example.demo.src.admin.AdminService
+com/example/demo/src/admin/model/CommentReportInfo.java
+ com.example.demo.src.admin.model.CommentReportInfo
+com/example/demo/src/admin/AdminDao.java
+ com.example.demo.src.admin.AdminDao
+com/example/demo/src/admin/AdminController.java
+ com.example.demo.src.admin.AdminController

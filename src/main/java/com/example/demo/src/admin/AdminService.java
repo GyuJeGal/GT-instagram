@@ -1,9 +1,7 @@
 package com.example.demo.src.admin;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.admin.model.UserDetail;
-import com.example.demo.src.admin.model.UserInfoReq;
-import com.example.demo.src.admin.model.UserInfoRes;
+import com.example.demo.src.admin.model.*;
 import com.example.demo.src.user.UserDao;
 import com.example.demo.src.user.model.PostUserRes;
 import com.example.demo.utils.JwtService;
@@ -46,6 +44,22 @@ public class AdminService {
     public void setUserBlock(long userId) throws BaseException {
         try {
             adminDao.setUserBlock(userId);
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<PostReportInfo> getPostReports() throws BaseException {
+        try {
+            return adminDao.getPostReports();
+        }catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<CommentReportInfo> getCommentReports() throws BaseException {
+        try {
+            return adminDao.getCommentReports();
         }catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

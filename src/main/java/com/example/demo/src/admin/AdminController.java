@@ -2,9 +2,7 @@ package com.example.demo.src.admin;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.admin.model.UserDetail;
-import com.example.demo.src.admin.model.UserInfoReq;
-import com.example.demo.src.admin.model.UserInfoRes;
+import com.example.demo.src.admin.model.*;
 import com.example.demo.utils.JwtService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -13,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @RestController
@@ -81,6 +80,42 @@ public class AdminController {
 
             String result = "회원 정지 설정 완료!";
             return new BaseResponse<>(result);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/post-reports")
+    @ApiOperation(value = "게시글 신고 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 4000, message = "데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<PostReportInfo>> getPostReports() {
+
+        try{
+            List<PostReportInfo> postReportInfoList = adminService.getPostReports();
+
+            return new BaseResponse<>(postReportInfoList);
+        } catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/comment-reports")
+    @ApiOperation(value = "댓글 신고 조회")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "요청에 성공하였습니다."),
+            @ApiResponse(code = 4000, message = "데이터베이스 연결에 실패하였습니다.")
+    })
+    public BaseResponse<List<CommentReportInfo>> getCommentReports() {
+
+        try{
+            List<CommentReportInfo> commentReportInfoList = adminService.getCommentReports();
+
+            return new BaseResponse<>(commentReportInfoList);
         } catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
